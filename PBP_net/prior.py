@@ -23,8 +23,6 @@ class Prior:
 
         # We refine the gaussian prior on the weights
 
-        print '===========DEBUG============='
-        print layer_sizes
 
         self.rnd_m_w = []
         self.m_w_hat_nat = []
