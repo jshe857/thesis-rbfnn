@@ -5,7 +5,7 @@ import theano
 import theano.tensor as T
 import theano.tensor.nlinalg as alg
 
-class RBF_layer:
+class RBF_layer(Network_Layer):
 
     def __init__(self, m_c_init, v_c_init, non_linear = True):
 
