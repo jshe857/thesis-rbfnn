@@ -23,19 +23,42 @@ class Prior:
 
         # We refine the gaussian prior on the weights
 
+        print '===========DEBUG============='
+        print layer_sizes
+
         self.rnd_m_w = []
         self.m_w_hat_nat = []
         self.v_w_hat_nat = []
         self.a_w_hat_nat = []
         self.b_w_hat_nat = []
-        for size_out, size_in in zip(layer_sizes[ 1 : ], layer_sizes[ : -1 ]):
-            self.rnd_m_w.append(1.0 / np.sqrt(size_in + 1) *
-                np.random.randn(size_out, size_in + 1))
-            self.m_w_hat_nat.append(np.zeros((size_out, size_in + 1)))
-            self.v_w_hat_nat.append((self.a_w - 1) / self.b_w * \
-                np.ones((size_out, size_in + 1)))
-            self.a_w_hat_nat.append(np.zeros((size_out, size_in + 1)))
-            self.b_w_hat_nat.append(np.zeros((size_out, size_in + 1)))
+
+        IN_DIM = layer_sizes[0]
+        RBF_DIM = layer_sizes[1]
+        OUT_DIM = layer_sizes[-1]
+
+
+        size_in = IN_DIM
+        size_out = RBF_DIM
+
+        self.rnd_m_w.append(1.0 / np.sqrt(size_in) *
+            np.random.randn(size_out, size_in))
+        self.m_w_hat_nat.append(np.zeros((size_out, size_in)))
+        self.v_w_hat_nat.append((self.a_w - 1) / self.b_w * \
+            np.ones((size_out, size_in)))
+        self.a_w_hat_nat.append(np.zeros((size_out, size_in)))
+        self.b_w_hat_nat.append(np.zeros((size_out, size_in)))
+
+        size_in = RBF_DIM
+        size_out = OUT_DIM
+
+
+        self.rnd_m_w.append(1.0 / np.sqrt(size_in + 1) *
+            np.random.randn(size_out, size_in + 1))
+        self.m_w_hat_nat.append(np.zeros((size_out, size_in + 1)))
+        self.v_w_hat_nat.append((self.a_w - 1) / self.b_w * \
+            np.ones((size_out, size_in + 1)))
+        self.a_w_hat_nat.append(np.zeros((size_out, size_in + 1)))
+        self.b_w_hat_nat.append(np.zeros((size_out, size_in + 1)))
 
     def get_initial_params(self):
 

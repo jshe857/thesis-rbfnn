@@ -88,7 +88,7 @@ class RBF_layer(Network_Layer):
 
 
 
-            exponent1 = m_linear**2*(1 - v_1_inv)*v_inv
+            exponent1 = m_linear*(1 - v_1_inv)*v_inv
 
             exponent1 = T.sum(exponent1,axis=1)
 

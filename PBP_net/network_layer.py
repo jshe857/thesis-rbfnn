@@ -49,41 +49,41 @@ class Network_layer:
 
     def output_probabilistic(self, m_w_previous, v_w_previous):
 
-        # We add an additional deterministic input with mean 1 and variance 0
-        m_w_previous_with_bias = \
-            T.concatenate([ m_w_previous, T.alloc(1, 1) ], 0)
-        v_w_previous_with_bias = \
-            T.concatenate([ v_w_previous, T.alloc(0, 1) ], 0)
 
 
-        # We compute the mean and variance after the linear operation
-
-        m_linear = T.dot(self.m_w, m_w_previous_with_bias) / T.sqrt(self.n_inputs)
-
-        v_linear = (T.dot(self.v_w, v_w_previous_with_bias) + \
-            T.dot(self.m_w**2, v_w_previous_with_bias) + \
-            T.dot(self.v_w, m_w_previous_with_bias**2)) / self.n_inputs
 
         if (self.non_linear):
-
+            m_in = self.m_w - m_w_previous
+            v_in = self.v_w
             # We compute the mean and variance after the ReLU activation
+            lam = 1
+            v_1 = 1 + 2*lam*v_in
+            v_1_inv = v_1**-1
 
-            alpha = m_linear / T.sqrt(v_linear)
-            gamma = Network_layer.gamma(-alpha)
-            gamma_robust = -alpha - 1.0 / alpha + 2.0 / alpha**3
-            gamma_final = T.switch(T.lt(-alpha, T.fill(alpha, 30)), gamma, gamma_robust)
-
-            v_aux = m_linear + T.sqrt(v_linear) * gamma_final
-
-            m_a = Network_layer.n_cdf(alpha) * v_aux
-            v_a = m_a * v_aux * Network_layer.n_cdf(-alpha) + \
-                Network_layer.n_cdf(alpha) * v_linear * \
-                (1 - gamma_final * (gamma_final + alpha))
+            s_1 = T.prod(v_1,axis=1)**-0.5
+            v_2 = 1 + 4*lam*v_in
+            v_2_inv = v_2**-1
+            s_2 = T.prod(v_2,axis=1)**-0.5
+            v_inv = v_in**-1
+            exponent1 = m_in*(1 - v_1_inv)*v_inv
+            exponent1 = T.sum(exponent1,axis=1)
+            exponent2 = m_in**2*(1 - v_2_inv)*v_inv
+            exponent2 = T.sum(exponent2,axis=1)
+            m_a = s_1*T.exp(-0.5*exponent1)
+            v_a = s_2*T.exp(-0.5*exponent2) - m_a**2
 
             return (m_a, v_a)
 
         else:
+            m_w_previous_with_bias = \
+            T.concatenate([ m_w_previous, T.alloc(1, 1) ], 0)
+            v_w_previous_with_bias = \
+            T.concatenate([ v_w_previous, T.alloc(0, 1) ], 0)
 
+            m_linear = T.dot(self.m_w, m_w_previous_with_bias) / T.sqrt(self.n_inputs)
+            v_linear = (T.dot(self.v_w, v_w_previous_with_bias) + \
+                T.dot(self.m_w**2, v_w_previous_with_bias) + \
+                T.dot(self.v_w, m_w_previous_with_bias**2)) / self.n_inputs
             return (m_linear, v_linear)
 
     def output_deterministic(self, output_previous):

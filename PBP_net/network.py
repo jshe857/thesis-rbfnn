@@ -60,6 +60,11 @@ class Network:
     def logZ_Z1_Z2(self, x, y):
         m, v = self.output_probabilistic(x)
 
+        op = theano.printing.Print('m')
+        m = op(m)
+
+        op = theano.printing.Print('v')
+        v = op(v)
         # Z is a normal distribution with the following variance
         v_final = v + self.b / (self.a - 1)
         v_final1 = v + self.b / self.a

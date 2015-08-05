@@ -12,25 +12,23 @@ np.random.seed(1)
 
 # We load the boston housing dataset
 
-data = np.loadtxt('boston_housing.txt')
+#data = np.loadtxt('boston_housing.txt')
 
 # We obtain the features and the targets
 
-X = data[ :, range(data.shape[ 1 ] - 1) ]
-y = data[ :, data.shape[ 1 ] - 1 ]
-print X.shape
-print y.shape
+#X = data[ :, range(data.shape[ 1 ] - 1) ]
+#y = data[ :, data.shape[ 1 ] - 1 ]
+
 
 # We create the train and test sets with 90% and 10% of the data
 
 #Generate artificial data
-num_pts = 800
+num_pts = 200
 x_pts =  np.linspace(-20,20,num=num_pts)
 x2_pts =  np.linspace(-5,5,num=num_pts)
 X =  np.array([x_pts,x2_pts]).T
 y = 0.5*x_pts**2 + x_pts + 0.3*+x_pts**3 + 0.1*x_pts**4 + x2_pts**5 + 5*np.random.randn(num_pts)
 
-print 'jeff'
 
 print X.shape
 print y.shape
@@ -49,9 +47,9 @@ y_test = y[ index_test ]
 # with 50 neurons in each one and normalizing the training features to have
 # zero mean and unit standard deviation in the trainig set.
 
-n_hidden_units = 10
+n_hidden_units = 1
 net = PBP_net.PBP_net(X_train, y_train,
-    [ n_hidden_units, n_hidden_units ], normalize = True, n_epochs = 40)
+    [n_hidden_units ], normalize = True, n_epochs = 1)
 
 # We make predictions for the test set
 
