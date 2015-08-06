@@ -60,11 +60,6 @@ class Network:
     def logZ_Z1_Z2(self, x, y):
         m, v = self.output_probabilistic(x)
 
-        op = theano.printing.Print('m')
-        m = op(m)
-
-        op = theano.printing.Print('v')
-        v = op(v)
         # Z is a normal distribution with the following variance
         v_final = v + self.b / (self.a - 1)
         v_final1 = v + self.b / self.a
@@ -78,13 +73,23 @@ class Network:
 
     def generate_updates(self, logZ, logZ1, logZ2):
         updates = []
+
         for i in range(len(self.params_m_w)):
-            updates.append((self.params_m_w[ i ], self.params_m_w[ i ] + \
-                self.params_v_w[ i ] * T.grad(logZ, self.params_m_w[ i ])))
-            updates.append((self.params_v_w[ i ], self.params_v_w[ i ] - \
-               self.params_v_w[ i ]**2 * \
-                (T.grad(logZ, self.params_m_w[ i ])**2 - 2 * \
-                T.grad(logZ, self.params_v_w[ i ]))))
+            
+            grad_m = (T.grad(logZ, self.params_m_w[ i ]))
+            grad_v = (T.grad(logZ, self.params_v_w[ i ]))
+            
+            grad_m = theano.printing.Print('gradient of m')(grad_m)
+            #grad_v = theano.printing.Print('gradient of v')(grad_v)
+
+            upd_m = (self.params_m_w[ i ] + self.params_v_w[ i ]*grad_m)
+            upd_v = ( self.params_v_w[ i ] - self.params_v_w[ i ]**2 * (grad_m**2 - 2 * grad_v ))
+           
+            upd_m = theano.printing.Print('updated m')(upd_m )
+            upd_v = theano.printing.Print('updated v')(upd_v)
+           
+            updates.append((self.params_m_w[ i ], upd_m))
+            updates.append((self.params_v_w[ i ], upd_v))
 
         updates.append((self.a, 1.0 / (T.exp(logZ2 - 2 * logZ1 + logZ) * \
             (self.a + 1) / self.a - 1.0)))
@@ -124,7 +129,7 @@ class Network:
             index1 = np.where(v_w_new[ i ] <= 1e-100)
             index2 = np.where(np.logical_or(np.isnan(m_w_new[ i ]),
                 np.isnan(v_w_new[ i ])))
-
+            
             index = [ np.concatenate((index1[ 0 ], index2[ 0 ])),
                 np.concatenate((index1[ 1 ], index2[ 1 ])) ]
 
