@@ -24,12 +24,12 @@ y = data[ :, data.shape[ 1 ] - 1 ]
 
 #Generate artificial data
 num_pts = 1000
-
+n_dims = 13
 x_pts =  np.linspace(-50,50,num=num_pts)
 #x2_pts =  np.linspace(-20,20,num=num_pts)
 X = np.array([x_pts]).T
 y = 10*np.exp(-0.05*np.absolute(x_pts - 60)) + 10*np.exp(-0.05*np.absolute(x_pts)) +  0*x_pts + 1*np.random.randn(num_pts)
-y = 5*np.sin(x_pts/10) + 1*np.random.randn(num_pts)
+y = 2*np.cos(x_pts/20) +  3*np.sin(x_pts/30) + 0.1*np.random.randn(num_pts)
 print X.shape
 print y.shape
 permutation = np.random.choice(range(X.shape[ 0 ]),
@@ -48,7 +48,7 @@ y_test = y[ index_test ]
 # zero mean and unit standard deviation in the trainig set.
 
 skip_len = num_pts/10
-n_hidden_units = 10
+n_hidden_units = 60
 net = PBP_net.PBP_net(X_train, y_train,
     [n_hidden_units ], normalize = True, n_epochs = 20)
 
