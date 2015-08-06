@@ -24,12 +24,12 @@ y = data[ :, data.shape[ 1 ] - 1 ]
 
 #Generate artificial data
 num_pts = 1000
-x_pts =  np.linspace(-100,100,num=num_pts)
+
+x_pts =  np.linspace(-50,50,num=num_pts)
 #x2_pts =  np.linspace(-20,20,num=num_pts)
 X = np.array([x_pts]).T
-y =5*np.exp(-0.05*np.absolute(x_pts)) + 2*x_pts + 1*np.random.randn(num_pts)
-
-
+y = 10*np.exp(-0.05*np.absolute(x_pts - 60)) + 10*np.exp(-0.05*np.absolute(x_pts)) +  0*x_pts + 1*np.random.randn(num_pts)
+y = 5*np.sin(x_pts/10) + 1*np.random.randn(num_pts)
 print X.shape
 print y.shape
 permutation = np.random.choice(range(X.shape[ 0 ]),
@@ -49,24 +49,24 @@ y_test = y[ index_test ]
 
 skip_len = num_pts/10
 n_hidden_units = 10
-net = PBP_net.PBP_net(X_train[0:skip_len-1], y_train[0:skip_len-1],
-    [n_hidden_units ], normalize = True, n_epochs = 1)
+net = PBP_net.PBP_net(X_train, y_train,
+    [n_hidden_units ], normalize = True, n_epochs = 20)
 
 m, v, v_noise = net.predict(X_test)
 plt.plot(X_test,y_test,'ro',X_test,m,'bx')
 plt.show()
 
 # We make predictions for the test set
-for i in range(0,len(X_train),skip_len):
+# for i in range(0,len(X_train),skip_len):
 
-    skip = min(i+skip_len,len(X_train)-1)
-    net.re_train(X_train[i:i+skip],y_train[i:i+skip],1)
-    m, v, v_noise = net.predict(X_test)
-    plt.plot(X_test,y_test,'ro',X_test,m,'bx')
-    red_patch = mpatches.Patch(color='red', label='Test data')
-    blue_patch = mpatches.Patch(color='blue', label='Prediction')
-    plt.legend(handles=[red_patch,blue_patch])
-    plt.show()
+    # skip = min(i+skip_len,len(X_train)-1)
+    # net.re_train(X_train[i:i+skip],y_train[i:i+skip],1)
+    # m, v, v_noise = net.predict(X_test)
+    # plt.plot(X_test,y_test,'ro',X_test,m,'bx')
+    # red_patch = mpatches.Patch(color='red', label='Test data')
+    # blue_patch = mpatches.Patch(color='blue', label='Prediction')
+    # plt.legend(handles=[red_patch,blue_patch])
+    # plt.show()
 # We compute the test RMSE
 
 rmse = np.sqrt(np.mean((y_test - m)**2))
