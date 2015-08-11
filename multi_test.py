@@ -4,7 +4,7 @@ import time
 import numpy as np
 
 import sys
-sys.path.append('PBP_net/')
+sys.path.append('EP/')
 import PBP_net
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
@@ -15,22 +15,22 @@ np.random.seed(1)
 #X = data[ :, range(data.shape[ 1 ] - 1) ]
 #y = data[ :, data.shape[ 1 ] - 1 ]
 
-## We load concrete dataset
-#csv = np.genfromtxt ('concrete.csv', delimiter=",",skip_header=1)
-#X = csv[ :, range(csv.shape[ 1 ] - 3) ]
-#y = csv[ :, csv.shape[ 1 ] - 1 ]
-
-csv = np.genfromtxt ('forestfires.csv', delimiter=",",skip_header=1)
-
-ind = range(csv.shape[ 1 ] - 1)
-ind = [x for x in ind if (x != 2 and x != 3)]
-print ind  
-X = csv[ :,ind]
+# We load concrete dataset
+csv = np.genfromtxt ('concrete.csv', delimiter=",",skip_header=1)
+X = csv[ :, range(csv.shape[ 1 ] - 3) ]
 y = csv[ :, csv.shape[ 1 ] - 1 ]
 
-for i in range(len(y)):
-    if y[i] > 0:
-        y[i] = np.log(y[i])
+#csv = np.genfromtxt ('forestfires.csv', delimiter=",",skip_header=1)
+
+#ind = range(csv.shape[ 1 ] - 1)
+#ind = [x for x in ind if (x != 2 and x != 3)]
+#print ind  
+#X = csv[ :,ind]
+#y = csv[ :, csv.shape[ 1 ] - 1 ]
+
+#for i in range(len(y)):
+    #if y[i] > 0:
+        #y[i] = np.log(y[i])
 
 
 

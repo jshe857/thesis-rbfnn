@@ -4,7 +4,7 @@ import math
 import numpy as np
 
 import sys
-sys.path.append('PBP_net/')
+sys.path.append('EP/')
 import PBP_net
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
