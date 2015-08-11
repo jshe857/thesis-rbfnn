@@ -10,26 +10,20 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 np.random.seed(1)
 
-# We load the boston housing dataset
-
-data = np.loadtxt('boston_housing.txt')
-
-# We obtain the features and the targets
-
-X = data[ :, range(data.shape[ 1 ] - 1) ]
-y = data[ :, data.shape[ 1 ] - 1 ]
 
 
 # We create the train and test sets with 90% and 10% of the data
 
 #Generate artificial data
-num_pts = 1000
+num_pts = 800
 n_dims = 13
 x_pts =  np.linspace(-50,50,num=num_pts)
 #x2_pts =  np.linspace(-20,20,num=num_pts)
 X = np.array([x_pts]).T
 y = 10*np.exp(-0.05*np.absolute(x_pts - 60)) + 10*np.exp(-0.05*np.absolute(x_pts)) +  0*x_pts + 1*np.random.randn(num_pts)
-y = 2*np.cos(x_pts/20) +  3*np.sin(x_pts/30) + 0.1*np.random.randn(num_pts)
+y = 2*np.cos(x_pts/5) +  2*np.sin(x_pts/30) + 0.1*np.random.randn(num_pts)
+
+
 print X.shape
 print y.shape
 permutation = np.random.choice(range(X.shape[ 0 ]),
