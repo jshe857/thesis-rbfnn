@@ -8,22 +8,22 @@ sys.path.append('EP/')
 import PBP_net
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
-np.random.seed(4)
+np.random.seed(2)
 
 #################### We load artificial data from an RBFNN ########################
 n_dim = 13
-n_nodes = 5
-n_pts = 1000
+n_nodes = 15
+n_pts = 10000
 c = np.random.rand(n_nodes,n_dim)*2
 w = np.random.rand(n_nodes,1)*2
 #generate random inputs with gaussian noise
-X =  (np.random.rand(n_pts,n_dim) -0.5)*4 + 0.1*np.random.randn(n_pts,n_dim)
+X =  (np.random.rand(n_pts,n_dim) -0.5)*4 + np.random.randn(n_pts,n_dim)
 y = []
 for x_in in X:
      rbfs = np.exp(-0.1*np.sum((x_in - c)**2,axis=1))
      y.append(np.sum(w*rbfs))
 
-y = np.array(y)
+y = np.array(y + np.random.randn(n_pts))
 
 #################### We load the boston housing dataset ###########################
 #data = np.loadtxt('boston_housing.txt')
@@ -75,7 +75,7 @@ y_test = y[ index_test ]
 # zero mean and unit standard deviation in the trainig set.
 
 n_hidden_units = 40
-skip_len = 5
+skip_len = 200
 net = PBP_net.PBP_net(X_train[: 2], y_train[: 2],
     [n_hidden_units ], normalize = True, n_epochs = 1)
 
@@ -102,7 +102,7 @@ run = 1
 #We make predictions for the test set
 for i in range(0,len(X_train),skip_len):
     skip = min(i+skip_len,len(X_train)-1)
-    net.re_train(X_train[i:i+skip],y_train[i:i+skip],1)
+    net.re_train(X_train[i:skip],y_train[i:skip],1)
     m, v, v_noise = net.predict(X_test)
     rmse_test = np.sqrt(np.mean((y_test - m)**2))
     m, v, v_noise = net.predict(X_train)
@@ -127,4 +127,5 @@ test_ll = np.mean(-0.5 * np.log(2 * math.pi * (v + v_noise)) - \
 print "test_log likelihood"
 print test_ll
 
+net.save_to_file('result.pickle')
 plt.savefig('result.png')

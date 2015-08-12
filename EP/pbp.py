@@ -115,7 +115,6 @@ class PBP:
 
         permutation = np.random.choice(range(X.shape[ 0 ]), X.shape[ 0 ],
             replace = False)
-
         counter = 0
         for i in permutation:
 
