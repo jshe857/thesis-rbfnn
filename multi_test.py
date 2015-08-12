@@ -8,20 +8,27 @@ sys.path.append('EP/')
 import PBP_net
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
-np.random.seed(1)
+np.random.seed(4)
 
 #################### We load artificial data from an RBFNN ########################
 n_dim = 13
-n_nodes = 10
-n_pts = 600
-centers = np.random.rand(n_nodes,n_dim)
+n_nodes = 5
+n_pts = 1000
+c = np.random.rand(n_nodes,n_dim)*2
+w = np.random.rand(n_nodes,1)*2
+#generate random inputs with gaussian noise
+X =  (np.random.rand(n_pts,n_dim) -0.5)*4 + 0.1*np.random.randn(n_pts,n_dim)
+y = []
+for x_in in X:
+     rbfs = np.exp(-0.1*np.sum((x_in - c)**2,axis=1))
+     y.append(np.sum(w*rbfs))
 
-x_pts =  np.linspace(-50,50,num=num_pts)
+y = np.array(y)
 
 #################### We load the boston housing dataset ###########################
-data = np.loadtxt('boston_housing.txt')
-X = data[ :, range(data.shape[ 1 ] - 1) ]
-y = data[ :, data.shape[ 1 ] - 1 ]
+#data = np.loadtxt('boston_housing.txt')
+#X = data[ :, range(data.shape[ 1 ] - 1) ]
+#y = data[ :, data.shape[ 1 ] - 1 ]
 
 #################### We load concrete dataset ######################################
 #csv = np.genfromtxt ('concrete.csv', delimiter=",",skip_header=1)
@@ -67,7 +74,7 @@ y_test = y[ index_test ]
 # with 50 neurons in each one and normalizing the training features to have
 # zero mean and unit standard deviation in the trainig set.
 
-n_hidden_units = 20
+n_hidden_units = 40
 skip_len = 5
 net = PBP_net.PBP_net(X_train[: 2], y_train[: 2],
     [n_hidden_units ], normalize = True, n_epochs = 1)
@@ -91,19 +98,19 @@ plt.draw()
 
 run = 1
 
-for j in range(10):
+#for j in range(5):
 #We make predictions for the test set
-    for i in range(0,len(X_train),skip_len):
-        skip = min(i+skip_len,len(X_train)-1)
-        net.re_train(X_train[i:i+skip],y_train[i:i+skip],1)
-        m, v, v_noise = net.predict(X_test)
-        rmse_test = np.sqrt(np.mean((y_test - m)**2))
-        m, v, v_noise = net.predict(X_train)
-        rmse_train = np.sqrt(np.mean((y_train - m)**2))
-        plt.plot(run,rmse_test,'bx',label='test')
-        plt.plot(run,rmse_train,'ro',label='train')
-        plt.draw()
-        run += 1
+for i in range(0,len(X_train),skip_len):
+    skip = min(i+skip_len,len(X_train)-1)
+    net.re_train(X_train[i:i+skip],y_train[i:i+skip],1)
+    m, v, v_noise = net.predict(X_test)
+    rmse_test = np.sqrt(np.mean((y_test - m)**2))
+    m, v, v_noise = net.predict(X_train)
+    rmse_train = np.sqrt(np.mean((y_train - m)**2))
+    plt.plot(run,rmse_test,'bx',label='test')
+    plt.plot(run,rmse_train,'ro',label='train')
+    plt.draw()
+    run += 1
 
 # We compute the test RMSE
 m, v, v_noise = net.predict(X_test)

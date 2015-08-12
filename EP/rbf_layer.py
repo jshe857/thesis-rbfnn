@@ -67,7 +67,7 @@ class RBF_layer(Network_Layer):
 
             # We compute the mean and variance after the RBF activation
 
-            lam = 1
+            lam = 0.1
             v_1 = 1 + 2*lam*v_linear
 
 
