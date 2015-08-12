@@ -81,22 +81,25 @@ plot = plt.plot(0,rmse_test,'bx',0,rmse_train,'ro')
 plt.draw()
 
 run = 1
+
+for j in range(10):
 #We make predictions for the test set
-for i in range(0,len(X_train),skip_len):
-    skip = min(i+skip_len,len(X_train)-1)
-    net.re_train(X_train[i:i+skip],y_train[i:i+skip],1)
-    m, v, v_noise = net.predict(X_test)
-    rmse_test = np.sqrt(np.mean((y_test - m)**2))
-    m, v, v_noise = net.predict(X_train)
-    rmse_train = np.sqrt(np.mean((y_train - m)**2))
-    plot = plt.plot(run,rmse_test,'bx',run,rmse_train,'ro')
-    plt.draw()
-    run += 1
+    for i in range(0,len(X_train),skip_len):
+        skip = min(i+skip_len,len(X_train)-1)
+        net.re_train(X_train[i:i+skip],y_train[i:i+skip],1)
+        m, v, v_noise = net.predict(X_test)
+        rmse_test = np.sqrt(np.mean((y_test - m)**2))
+        m, v, v_noise = net.predict(X_train)
+        rmse_train = np.sqrt(np.mean((y_train - m)**2))
+        plot = plt.plot(run,rmse_test,'bx',run,rmse_train,'ro')
+        plt.draw()
+        run += 1
 
 # We compute the test RMSE
 m, v, v_noise = net.predict(X_test)
 rmse = np.sqrt(np.mean((y_test - m)**2))
 
+print
 print 'rmse'
 print rmse
 

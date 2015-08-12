@@ -58,7 +58,7 @@ plt.show()
 # We compute the test RMSE
 
 rmse = np.sqrt(np.mean((y_test - m)**2))
-
+print
 print 'rmse'
 print rmse
 
