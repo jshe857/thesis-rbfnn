@@ -8,8 +8,8 @@ import theano.tensor as T
 class Network_layer:
 
     def __init__(self, m_w_init, v_w_init, non_linear = True):
-        print('layer')
-        print m_w_init
+        # print('layer')
+        # print m_w_init
         # We create the theano variables for the means and variances
         self.m_w = theano.shared(value = m_w_init.astype(theano.config.floatX),
             name='m_w', borrow = True)
@@ -91,7 +91,7 @@ class Network_layer:
             m_in = self.m_w - m_w_previous
             v_in = self.v_w
             # We compute the mean and variance after the ReLU activation
-            lam = 1
+            lam = 10 
             v_1 = 1 + 2*lam*v_in
             v_1_inv = v_1**-1
 

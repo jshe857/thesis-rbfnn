@@ -67,7 +67,7 @@ class PBP:
             params = self.prior.refine_prior(params)
             self.network.set_params(params)
 
-            sys.stdout.write('{}\n'.format(0))
+            sys.stdout.write('{}'.format(0))
             sys.stdout.flush()
 
             for i in range(int(n_iterations) - 1):
@@ -83,7 +83,7 @@ class PBP:
                 params = self.prior.refine_prior(params)
                 self.network.set_params(params)
 
-                sys.stdout.write('{}\n'.format(i + 1))
+                sys.stdout.write('{}'.format(i + 1))
                 sys.stdout.flush()
 
     def get_deterministic_output(self, X_test):
@@ -131,7 +131,7 @@ class PBP:
 
             counter += 1
 
-        sys.stdout.write('\n')
+        sys.stdout.write('')
         sys.stdout.flush()
 
     def sample_w(self):
