@@ -9,8 +9,7 @@ import pbp
 
 class PBP_net:
 
-    def __init__(self, X_train, y_train, n_hidden, n_epochs = 40,
-        normalize = False):
+    def __init__(self, X_train, y_train, n_hidden):
 
         """
             Constructor for the class implementing a Bayesian neural network
@@ -34,21 +33,19 @@ class PBP_net:
         # We normalize the training data to have zero mean and unit standard
         # deviation in the training set if necessary
 
-        if normalize:
-            self.std_X_train = np.std(X_train, 0)
-            self.std_X_train[ self.std_X_train == 0 ] = 1
-            self.mean_X_train = np.mean(X_train, 0)
-        else:
-            self.std_X_train = np.ones(X_train.shape[ 1 ])
-            self.mean_X_train = np.zeros(X_train.shape[ 1 ])
+        self.std_X_train = np.std(X_train, 0)
+        self.std_X_train[ self.std_X_train == 0 ] = 1
+        self.mean_X_train = np.mean(X_train, 0)
+            #self.std_X_train = np.ones(X_train.shape[ 1 ])
+            #self.mean_X_train = np.zeros(X_train.shape[ 1 ])
 
-        X_train = (X_train - np.full(X_train.shape, self.mean_X_train)) / \
-            np.full(X_train.shape, self.std_X_train)
+        #X_train = (X_train - np.full(X_train.shape, self.mean_X_train)) / \
+            #np.full(X_train.shape, self.std_X_train)
 
         self.mean_y_train = np.mean(y_train)
         self.std_y_train = np.std(y_train)
 
-        y_train_normalized = (y_train - self.mean_y_train) / self.std_y_train
+        #y_train_normalized = (y_train - self.mean_y_train) / self.std_y_train
 
         # We construct the network
 
@@ -59,11 +56,11 @@ class PBP_net:
 
         # We iterate the learning process
 
-        self.pbp_instance.do_pbp(X_train, y_train_normalized, n_epochs)
+        # self.pbp_instance.do_pbp(X_train, y_train_normalized, n_epochs)
 
         # We are done!
 
-    def re_train(self, X_train, y_train, n_epochs):
+    def train(self, X_train, y_train, n_epochs):
 
         """
             Function that re-trains the network on some data.

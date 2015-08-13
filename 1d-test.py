@@ -38,23 +38,26 @@ y_test = y[ index_test ]
 skip_len = num_pts/10
 n_hidden_units = 60
 net = PBP_net.PBP_net(X_train, y_train,
-    [n_hidden_units ], normalize = True, n_epochs = 20)
+    [n_hidden_units])
 
 m, v, v_noise = net.predict(X_test)
 plt.plot(X_test,y_test,'ro',X_test,m,'bx')
 plt.show()
 
+net.train(X_train,y_train,20)
+m, v, v_noise = net.predict(X_test)
+plt.plot(X_test,y_test,'ro',X_test,m,'bx')
+plt.show()
 # We make predictions for the test set
-# for i in range(0,len(X_train),skip_len):
-
-    # skip = min(i+skip_len,len(X_train)-1)
-    # net.re_train(X_train[i:i+skip],y_train[i:i+skip],1)
-    # m, v, v_noise = net.predict(X_test)
-    # plt.plot(X_test,y_test,'ro',X_test,m,'bx')
-    # red_patch = mpatches.Patch(color='red', label='Test data')
-    # blue_patch = mpatches.Patch(color='blue', label='Prediction')
-    # plt.legend(handles=[red_patch,blue_patch])
-    # plt.show()
+#for i in range(0,len(X_train),skip_len):
+    #skip = min(i+skip_len,len(X_train)-1)
+    #net.train(X_train[i:skip],y_train[i:skip],1)
+    #m, v, v_noise = net.predict(X_test)
+    #plt.plot(X_test,y_test,'ro',X_test,m,'bx')
+    #red_patch = mpatches.Patch(color='red', label='Test data')
+    #blue_patch = mpatches.Patch(color='blue', label='Prediction')
+    #plt.legend(handles=[red_patch,blue_patch])
+    #plt.show()
 # We compute the test RMSE
 
 rmse = np.sqrt(np.mean((y_test - m)**2))
