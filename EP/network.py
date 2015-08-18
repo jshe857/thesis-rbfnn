@@ -79,7 +79,7 @@ class Network:
             grad_m = (T.grad(logZ, self.params_m_w[ i ]))
             grad_v = (T.grad(logZ, self.params_v_w[ i ]))
             
-            # grad_m = theano.printing.Print('gradient of m')(grad_m)
+            #grad_m = theano.printing.Print('gradient of m')(grad_m)
             #grad_v = theano.printing.Print('gradient of v')(grad_v)
 
             upd_m = (self.params_m_w[ i ] + self.params_v_w[ i ]*grad_m)

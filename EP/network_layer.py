@@ -50,7 +50,7 @@ class Network_layer:
     def output_probabilistic(self, m_w_previous, v_w_previous):
 
 
-          ## We add an additional deterministic input with mean 1 and variance 0
+           #We add an additional deterministic input with mean 1 and variance 0
         #m_w_previous_with_bias = \
             #T.concatenate([ m_w_previous, T.alloc(1, 1) ], 0)
         #v_w_previous_with_bias = \
@@ -91,7 +91,7 @@ class Network_layer:
             m_in = self.m_w - m_w_previous
             v_in = self.v_w
             # We compute the mean and variance after the ReLU activation
-            lam = 10 
+            lam = 0.01 
             v_1 = 1 + 2*lam*v_in
             v_1_inv = v_1**-1
 

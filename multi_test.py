@@ -2,7 +2,7 @@
 import math
 import time
 import numpy as np
-
+from sklearn import svm
 import sys
 sys.path.append('EP/')
 import PBP_net
@@ -11,9 +11,9 @@ import matplotlib.patches as mpatches
 np.random.seed(1)
 
 #################### We load artificial data from an RBFNN ########################
-n_dim = 3
-n_nodes = 15
-n_pts = 1000
+n_dim = 10
+n_nodes = 10
+n_pts = 100
 c = np.random.rand(n_nodes,n_dim)*2
 w = np.random.rand(n_nodes,1)*3
 #generate random inputs with gaussian noise
@@ -23,7 +23,7 @@ for x_in in X:
      rbfs = np.exp(-0.1*np.sum((x_in - c)**2,axis=1))
      y.append(np.sum(w*rbfs))
 
-y = np.array(y + 5*np.random.randn(n_pts))
+y = np.array(y + 1*np.random.randn(n_pts))
 #################### We load the boston housing dataset ###########################
 #data = np.loadtxt('boston_housing.txt')
 #X = data[ :, range(data.shape[ 1 ] - 1) ]
@@ -74,7 +74,7 @@ y_test = y[ index_test ]
 # with 50 neurons in each one and normalizing the training features to have
 # zero mean and unit standard deviation in the trainig set.
 
-n_hidden_units = 40
+n_hidden_units = 10
 skip_len = 500
 net = PBP_net.PBP_net(X_train, y_train,
     [n_hidden_units ])
@@ -86,32 +86,34 @@ m, v, v_noise = net.predict(X_train)
 rmse_train = np.sqrt(np.mean((y_train - m)**2))
 
 # Start plot
-plt.ion()
-plt.show()
-patch_test = mpatches.Patch(color='blue', label='rmse_test')
-patch_train = mpatches.Patch(color='red', label='rmse_train')
-plt.legend(handles=[patch_test,patch_train])
-plot = plt.plot(0,rmse_test,'bx',label='test')
-plt.plot(0,rmse_train,'ro',label='train')
-plt.draw()
+#plt.ion()
+#plt.show()
+#patch_test = mpatches.Patch(color='blue', label='rmse_test')
+#patch_train = mpatches.Patch(color='red', label='rmse_train')
+#plt.legend(handles=[patch_test,patch_train])
+#plot = plt.plot(0,rmse_test,'bx',label='test')
+#plt.plot(0,rmse_train,'ro',label='train')
+#plt.draw()
 
-run = 1
+#run = 1
 
-for j in range(20):
+#for j in range(40):
+    #print '============iteration================'
 #We make predictions for the test set
-    for i in range(0,len(X_train),skip_len):
-        skip = min(i+skip_len,len(X_train)-1)
-        net.train(X_train[i:skip],y_train[i:skip],1)
+    #for i in range(0,len(X_train),skip_len):
+        #skip = min(i+skip_len,len(X_train)-1)
+        #net.train(X_train[i:skip],y_train[i:skip],1)
         
-        m, v, v_noise = net.predict(X_test)
-        rmse_test = np.sqrt(np.mean((y_test - m)**2))
-        m, v, v_noise = net.predict(X_train)
-        rmse_train = np.sqrt(np.mean((y_train - m)**2))
-        plt.plot(run,rmse_test,'bx',label='test')
-        plt.plot(run,rmse_train,'ro',label='train')
-        plt.draw()
-        run += 1
+        #m, v, v_noise = net.predict(X_test)
+        #rmse_test = np.sqrt(np.mean((y_test - m)**2))
+        #m, v, v_noise = net.predict(X_train)
+        #rmse_train = np.sqrt(np.mean((y_train - m)**2))
+        #plt.plot(run,rmse_test,'bx',label='test')
+        #plt.plot(run,rmse_train,'ro',label='train')
+        #plt.draw()
+        #run += 1
 # We compute the test RMSE
+net.train(X_train,y_train,40)
 m, v, v_noise = net.predict(X_test)
 rmse = np.sqrt(np.mean((y_test - m)**2))
 print
@@ -125,4 +127,8 @@ test_ll = np.mean(-0.5 * np.log(2 * math.pi * (v + v_noise)) - \
 print "test_log likelihood"
 print test_ll
 
+result = svm.SVR().fit(X_train,y_train).predict(X_test) 
+svr_res = np.sqrt(np.mean((y_test - result)**2))
+print "svr"
+print svr_res
 plt.savefig('result.png')
