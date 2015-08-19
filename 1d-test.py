@@ -1,14 +1,16 @@
 #!/usr/bin/python2
 import math
-
 import numpy as np
-
 import sys
+sys.path.append('EM/')
+import EM_net
 sys.path.append('EP/')
-import PBP_net
+import EP_net
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 np.random.seed(1)
+
+
 # We create the train and test sets with 90% and 10% of the data
 #Generate artificial data
 num_pts = 800
@@ -34,21 +36,21 @@ y_test = y[ index_test ]
 # We construct the network with one hidden layer with two-hidden layers
 # with 50 neurons in each one and normalizing the training features to have
 # zero mean and unit standard deviation in the trainig set.
-
-skip_len = num_pts/10
+lam = 10
 n_hidden_units = 60
-net = PBP_net.PBP_net(X_train, y_train,
-    [n_hidden_units])
+net = EP_net.EP_net(X_train, y_train,
+    [n_hidden_units],lam)
 
-m, v, v_noise = net.predict(X_test)
-plt.plot(X_test,y_test,'ro',X_test,m,'bx')
-plt.show()
+#m, v, v_noise = net.predict(X_test)
+#plt.plot(X_test,y_test,'ro',X_test,m,'bx')
+#plt.show()
 
 net.train(X_train,y_train,20)
 m, v, v_noise = net.predict(X_test)
 plt.plot(X_test,y_test,'ro',X_test,m,'bx')
 plt.show()
 # We make predictions for the test set
+#skip_len = 10
 #for i in range(0,len(X_train),skip_len):
     #skip = min(i+skip_len,len(X_train)-1)
     #net.train(X_train[i:skip],y_train[i:skip],1)

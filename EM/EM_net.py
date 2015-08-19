@@ -11,8 +11,12 @@ class EM_net:
         self.mean_X_train = np.mean(X_train, 0)
         self.n_units = n_hidden
         self.c = cluster.KMeans(n_clusters=self.n_units).fit(X_train).cluster_centers_ 
-        self.lam = lam 
+        self.lam = lam
+        #learning rate
         self.eta = 1.0
+        #regularizer
+        self.a = 1.0
+        #add bias in weights
         self.w_sgd = np.random.randn(self.n_units+1)
     def pseudoInverse(self, X_train, y_train):
         G = []
@@ -29,7 +33,6 @@ class EM_net:
                 #add bias
                 rbf_val = np.append(rbf_val,1)
                 rbf_out = np.sum(self.w_sgd*rbf_val)
-                err = y - rbf_out
                 self.w_sgd = self.w_sgd + self.eta*(y-rbf_out)*rbf_val
     def pseudoPredict(self, X_test):    
         rbf_val = []
@@ -49,4 +52,6 @@ class EM_net:
         
         rbf_out = np.sum(self.w_sgd*rbf_val,axis=1)
         return rbf_out 
+    def get_sgd_weight():
+        return self.w_sgd
 

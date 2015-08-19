@@ -8,52 +8,51 @@ import sys
 sys.path.append('EM/')
 import EM_net
 sys.path.append('EP/')
-
 import EP_net
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 np.random.seed(1)
 
 #################### We load artificial data from an RBFNN ########################
-# n_dim = 10
-# n_nodes = 10
-# n_pts = 100
-# c = np.random.rand(n_nodes,n_dim)*2
-# w = np.random.rand(n_nodes,1)*3
-# #generate random inputs with gaussian noise
-# X =  (np.random.rand(n_pts,n_dim) - 0.5)*4 + np.random.randn(n_pts,n_dim)
-# y = []
-# for x_in in X:
-     # rbfs = np.exp(-0.1*np.sum((x_in - c)**2,axis=1))
-     # y.append(np.sum(w*rbfs))
+#n_dim = 10
+#n_nodes = 10
+#n_pts = 100
+#c = np.random.rand(n_nodes,n_dim)*2
+#w = np.random.rand(n_nodes,1)*3
+#generate random inputs with gaussian noise
+#X =  (np.random.rand(n_pts,n_dim) - 0.5)*4 + np.random.randn(n_pts,n_dim)
+#y = []
+#for x_in in X:
+     #rbfs = np.exp(-0.1*np.sum((x_in - c)**2,axis=1))
+     #y.append(np.sum(w*rbfs))
 
-# y = np.array(y + 1*np.random.randn(n_pts))
+#y = np.array(y + 1*np.random.randn(n_pts))
 #################### We load the boston housing dataset ###########################
-#data = np.loadtxt('boston_housing.txt')
-#X = data[ :, range(data.shape[ 1 ] - 1) ]
-#y = data[ :, data.shape[ 1 ] - 1 ]
+data = np.loadtxt('boston_housing.txt')
+X = data[ :, range(data.shape[ 1 ] - 1) ]
+y = data[ :, data.shape[ 1 ] - 1 ]
 
 #################### We load concrete dataset ######################################
-csv = np.genfromtxt ('concrete.csv', delimiter=",",skip_header=1)
-X = csv[ :, range(csv.shape[ 1 ] - 3) ]
-y = csv[ :, csv.shape[ 1 ] - 1 ]
+#csv = np.genfromtxt ('concrete.csv', delimiter=",",skip_header=1)
+#X = csv[ :, range(csv.shape[ 1 ] - 3) ]
+#y = csv[ :, csv.shape[ 1 ] - 1 ]
 
 ##################### We load forestfires dataset #################################
-# csv = np.genfromtxt ('forestfires.csv', delimiter=",",skip_header=1)
+#csv = np.genfromtxt ('forestfires.csv', delimiter=",",skip_header=1)
 
-# ind = range(csv.shape[ 1 ] - 1)
-# ind = [x for x in ind if (x != 2 and x != 3)]
-# X = csv[ :,ind]
-# y = csv[ :, csv.shape[ 1 ] - 1 ]
+#ind = range(csv.shape[ 1 ] - 1)
+#ind = [x for x in ind if (x != 2 and x != 3)]
+#X = csv[ :,ind]
+#y = csv[ :, csv.shape[ 1 ] - 1 ]
 
-# for i in range(len(y)):
-    # if y[i] > 0:
-        # y[i] = np.log(y[i])
+#for i in range(len(y)):
+    #if y[i] > 0:
+        #y[i] = np.log(y[i])
 
 ###################### We load the word music dataset ###############################
-# csv = np.genfromtxt ('music.csv', delimiter=",",skip_header=1)
-# X = csv[ :, range(csv.shape[ 1 ] - 2) ]
-# y = csv[ :, csv.shape[ 1 ] - 1 ]
+#csv = np.genfromtxt ('music.csv', delimiter=",",skip_header=1)
+#X = csv[ :, range(csv.shape[ 1 ] - 2) ]
+#y = csv[ :, csv.shape[ 1 ] - 1 ]
 
 
 # We create the train and test sets with 80% and 20% of the data
@@ -117,7 +116,7 @@ net.train(X_train,y_train,40)
 m, v, v_noise = net.predict(X_test)
 rmse = np.sqrt(np.mean((y_test - m)**2))
 print 
-print 'rmse'
+print 'EP-rmse'
 print rmse
 
 ################# EM for RBFNN approach #############################################
@@ -150,4 +149,3 @@ result = svm.SVR().fit(X_train,y_train).predict(X_test)
 svr_res = np.sqrt(np.mean((y_test - result)**2))
 print "svr"
 print svr_res
-plt.savefig('result.png')
