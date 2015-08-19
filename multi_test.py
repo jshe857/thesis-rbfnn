@@ -29,14 +29,14 @@ np.random.seed(1)
 
 # y = np.array(y + 1*np.random.randn(n_pts))
 #################### We load the boston housing dataset ###########################
-data = np.loadtxt('boston_housing.txt')
-X = data[ :, range(data.shape[ 1 ] - 1) ]
-y = data[ :, data.shape[ 1 ] - 1 ]
+#data = np.loadtxt('boston_housing.txt')
+#X = data[ :, range(data.shape[ 1 ] - 1) ]
+#y = data[ :, data.shape[ 1 ] - 1 ]
 
 #################### We load concrete dataset ######################################
-#csv = np.genfromtxt ('concrete.csv', delimiter=",",skip_header=1)
-#X = csv[ :, range(csv.shape[ 1 ] - 3) ]
-#y = csv[ :, csv.shape[ 1 ] - 1 ]
+csv = np.genfromtxt ('concrete.csv', delimiter=",",skip_header=1)
+X = csv[ :, range(csv.shape[ 1 ] - 3) ]
+y = csv[ :, csv.shape[ 1 ] - 1 ]
 
 ##################### We load forestfires dataset #################################
 # csv = np.genfromtxt ('forestfires.csv', delimiter=",",skip_header=1)
@@ -127,13 +127,6 @@ rbf_pseudo = em.pseudoPredict(X_test)
 rmse = np.sqrt(np.mean((y_test - rbf_pseudo)**2))
 print 'EM-pseudo'
 print rmse
-
-
-rbf_sgd = em.sgdPredict(X_test)
-rmse = np.sqrt(np.mean((y_test - rbf_sgd)**2))
-print 'EM-sgd'
-print rmse
-
 
 em.sgd(X_train, y_train)
 rbf_sgd = em.sgdPredict(X_test)
