@@ -29,9 +29,9 @@ n_pts = 1000
      #y.append(np.sum(2*sins))
 #y = np.array(y + 1*np.random.randn(n_pts))
 #################### We load the boston housing dataset ###########################
-#data = np.loadtxt('boston_housing.txt')
-#X = data[ :, range(data.shape[ 1 ] - 1) ]
-#y = data[ :, data.shape[ 1 ] - 1 ]
+data = np.loadtxt('boston_housing.txt')
+X = data[ :, range(data.shape[ 1 ] - 1) ]
+y = data[ :, data.shape[ 1 ] - 1 ]
 
 #################### We load concrete dataset ######################################
 #csv = np.genfromtxt ('concrete.csv', delimiter=",",skip_header=1)
@@ -117,9 +117,14 @@ net.train(X_train,y_train,40)
 m, v, v_noise = net.predict(X_test)
 rmse = np.sqrt(np.mean((y_test - m)**2))
 print 
-print 'EP-rmse'
+print '==================EP========================'
+print 'test error'
 print rmse
 
+m, v, v_noise = net.predict(X_train)
+rmse = np.sqrt(np.mean((y_train - m)**2))
+print 'train error'
+print rmse
 ################# EM for RBFNN approach #############################################
 em = EM_net.EM_net(X_train,y_train, n_hidden_units,lam)
 
@@ -139,13 +144,14 @@ for i in range(0,len(X_train),skip_len):
 rbf_sgd = em.sgd_predict(X_test)
 rmse = np.sqrt(np.mean((y_test - rbf_sgd)**2))
 
-print 'EM-sgd'
+print '==================EM========================'
+print 'test error'
 print rmse
 
-#rbf_sgd = em.sgd_predict(X_train)
-#rmse = np.sqrt(np.mean((y_train - rbf_sgd)**2))
-#print 'EM-sgd-train'
-#print rmse
+rbf_sgd = em.sgd_predict(X_train)
+rmse = np.sqrt(np.mean((y_train - rbf_sgd)**2))
+print 'train error'
+print rmse
 
 
 #TODO gradient descent
