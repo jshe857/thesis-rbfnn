@@ -7,7 +7,7 @@ import theano.tensor as T
 
 class Network_layer:
 
-    def __init__(self, m_w_init, v_w_init, non_linear = True):
+    def __init__(self, m_w_init, v_w_init, non_linear,lam):
         # print('layer')
         # print m_w_init
         # We create the theano variables for the means and variances

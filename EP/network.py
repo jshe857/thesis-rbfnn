@@ -9,7 +9,7 @@ import network_layer
 
 class Network:
 
-    def __init__(self, m_w_init, v_w_init, a_init, b_init):
+    def __init__(self, m_w_init, v_w_init, a_init, b_init,lam):
 
         # We create the different layers
 
@@ -17,10 +17,10 @@ class Network:
 
         if len(m_w_init) > 1:
             for m_w, v_w in zip(m_w_init[ : -1 ], v_w_init[ : -1 ]):
-                self.layers.append(network_layer.Network_layer(m_w, v_w, True))
+                self.layers.append(network_layer.Network_layer(m_w, v_w, True,lam))
 
         self.layers.append(network_layer.Network_layer(m_w_init[ -1 ],
-            v_w_init[ -1 ], False))
+            v_w_init[ -1 ], False,lam))
 
         # We create mean and variance parameters from all layers
 

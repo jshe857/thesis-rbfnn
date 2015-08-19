@@ -77,7 +77,7 @@ lam = 0.01
 n_hidden_units = 10
 # skip_len = 500
 net = EP_net.EP_net(X_train, y_train,
-    [n_hidden_units ])
+    [n_hidden_units ],lam)
 
 # m, v, v_noise = net.predict(X_test)
 # rmse_test = np.sqrt(np.mean((y_test - m)**2))
