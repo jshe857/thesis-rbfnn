@@ -51,12 +51,12 @@ class EP_net:
 
         n_units_per_layer = \
             np.concatenate(([ X_train.shape[ 1 ] ], n_hidden, [ 1 ]))
-        self.pbp_instance = \
+        self.ep_instance = \
             ep.EP(n_units_per_layer, self.mean_y_train, self.std_y_train,lam)
 
         # We iterate the learning process
 
-        # self.pbp_instance.do_pbp(X_train, y_train_normalized, n_epochs)
+        # self.ep_instance.do_ep(X_train, y_train_normalized, n_epochs)
 
         # We are done!
 
@@ -79,7 +79,7 @@ class EP_net:
 
         y_train_normalized = (y_train - self.mean_y_train) / self.std_y_train
 
-        self.pbp_instance.do_pbp(X_train, y_train_normalized, n_epochs)
+        self.ep_instance.do_ep(X_train, y_train_normalized, n_epochs)
 
     def predict(self, X_test):
 
@@ -106,7 +106,7 @@ class EP_net:
         # We compute the predictive mean and variance for the target variables
         # of the test data
 
-        m, v, v_noise = self.pbp_instance.get_predictive_mean_and_variance(X_test)
+        m, v, v_noise = self.ep_instance.get_predictive_mean_and_variance(X_test)
 
         # We are done!
 
@@ -134,7 +134,7 @@ class EP_net:
         # We compute the predictive mean and variance for the target variables
         # of the test data
 
-        o = self.pbp_instance.get_deterministic_output(X_test)
+        o = self.ep_instance.get_deterministic_output(X_test)
 
         # We are done!
 
@@ -148,7 +148,7 @@ class EP_net:
 
         """
  
-        self.pbp_instance.sample_w()
+        self.ep_instance.sample_w()
 
     def save_to_file(self, filename):
 
@@ -169,7 +169,7 @@ class EP_net:
 
         save_object(self, filename)
 
-def load_PBP_net_from_file(filename):
+def load_ep_net_from_file(filename):
 
     """
         Function that load a network from a file.
@@ -189,6 +189,6 @@ def load_PBP_net_from_file(filename):
 
     # We load the dictionary with the network parameters
 
-    PBP_network = load_object(filename)
+    ep_network = load_object(filename)
 
-    return PBP_network
+    return ep_network

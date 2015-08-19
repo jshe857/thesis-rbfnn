@@ -53,7 +53,7 @@ class EP:
         self.predict_deterministic = theano.function([ self.x ],
             self.network.output_deterministic(self.x))
 
-    def do_pbp(self, X_train, y_train, n_iterations):
+    def do_ep(self, X_train, y_train, n_iterations):
 
         if n_iterations > 0:
 
