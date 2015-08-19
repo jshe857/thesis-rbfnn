@@ -26,7 +26,7 @@ class Network_layer:
         # We store the number of inputs
 
         self.n_inputs = theano.shared(float(m_w_init.shape[ 1 ]))
-
+        self.lam = lam
     @staticmethod
     def n_pdf(x):
 
@@ -91,7 +91,7 @@ class Network_layer:
             m_in = self.m_w - m_w_previous
             v_in = self.v_w
             # We compute the mean and variance after the ReLU activation
-            lam = 0.01 
+            lam = self.lam
             v_1 = 1 + 2*lam*v_in
             v_1_inv = v_1**-1
 
