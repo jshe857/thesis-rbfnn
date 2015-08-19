@@ -4,7 +4,6 @@ import numpy as np
 from sklearn import cluster
 
 class EM_net:
-    
     def __init__(self, X_train, y_train, n_hidden,lam=1,eta=0.01,a=0.0001):
         self.mean_y_train = np.mean(y_train)
         self.std_y_train = np.std(y_train)
