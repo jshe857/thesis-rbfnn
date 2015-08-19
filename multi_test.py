@@ -117,7 +117,7 @@ net.train(X_train,y_train,40)
 m, v, v_noise = net.predict(X_test)
 rmse = np.sqrt(np.mean((y_test - m)**2))
 print 
-print '==================EP========================'
+print '====================EP========================'
 print 'test error'
 print rmse
 
@@ -144,7 +144,7 @@ for i in range(0,len(X_train),skip_len):
 rbf_sgd = em.sgd_predict(X_test)
 rmse = np.sqrt(np.mean((y_test - rbf_sgd)**2))
 
-print '==================EM========================'
+print '====================EM========================'
 print 'test error'
 print rmse
 
@@ -154,7 +154,6 @@ print 'train error'
 print rmse
 
 
-#TODO gradient descent
 
 # We compute the test log-likelihood
 
@@ -165,5 +164,5 @@ print rmse
 
 result = svm.SVR().fit(X_train,y_train).predict(X_test) 
 svr_res = np.sqrt(np.mean((y_test - result)**2))
-print "svr"
+print '==================SVR========================'
 print svr_res
