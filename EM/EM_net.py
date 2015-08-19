@@ -13,12 +13,12 @@ class EM_net:
         self.c = cluster.KMeans(n_clusters=self.n_units).fit(X_train).cluster_centers_ 
         self.lam = lam
         #learning rate
-        self.eta = 1.0
+        self.eta = 0.0001
         #regularizer
         self.a = 1.0
         #add bias in weights
         self.w_sgd = np.random.randn(self.n_units+1)
-    def pseudoInverse(self, X_train, y_train):
+    def pseudo_inverse(self, X_train, y_train):
         G = []
         for x in X_train:
             basis_out = np.exp(-self.lam*np.sum((self.c-x)**2,axis=1))
@@ -34,7 +34,7 @@ class EM_net:
                 rbf_val = np.append(rbf_val,1)
                 rbf_out = np.sum(self.w_sgd*rbf_val)
                 self.w_sgd = self.w_sgd + self.eta*(y-rbf_out)*rbf_val
-    def pseudoPredict(self, X_test):    
+    def pseudo_predict(self, X_test):    
         rbf_val = []
         for x in X_test:
             basis_out = np.exp(-self.lam*np.sum((self.c-x)**2,axis=1))
@@ -43,7 +43,7 @@ class EM_net:
         
         rbf_out = np.sum(self.w_inv*rbf_val,axis=1)
         return rbf_out 
-    def sgdPredict(self, X_test):    
+    def sgd_predict(self, X_test):    
         rbf_val = []
         for x in X_test:
             basis_out = np.exp(-self.lam*np.sum((self.c-x)**2,axis=1))
@@ -52,6 +52,6 @@ class EM_net:
         
         rbf_out = np.sum(self.w_sgd*rbf_val,axis=1)
         return rbf_out 
-    def get_sgd_weight():
+    def get_sgd_weights(self):
         return self.w_sgd
 

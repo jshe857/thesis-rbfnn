@@ -14,23 +14,24 @@ import matplotlib.patches as mpatches
 np.random.seed(1)
 
 #################### We load artificial data from an RBFNN ########################
-#n_dim = 10
-#n_nodes = 10
-#n_pts = 100
+n_dim = 10
+n_nodes = 10
+n_pts = 1000
 #c = np.random.rand(n_nodes,n_dim)*2
 #w = np.random.rand(n_nodes,1)*3
 #generate random inputs with gaussian noise
 #X =  (np.random.rand(n_pts,n_dim) - 0.5)*4 + np.random.randn(n_pts,n_dim)
 #y = []
 #for x_in in X:
-     #rbfs = np.exp(-0.1*np.sum((x_in - c)**2,axis=1))
-     #y.append(np.sum(w*rbfs))
-
+     ##rbfs = np.exp(-0.1*np.sum((x_in - c)**2,axis=1))
+     ##y.append(np.sum(w*rbfs))
+     #sins = np.sin(2*x_in)
+     #y.append(np.sum(2*sins))
 #y = np.array(y + 1*np.random.randn(n_pts))
 #################### We load the boston housing dataset ###########################
-data = np.loadtxt('boston_housing.txt')
-X = data[ :, range(data.shape[ 1 ] - 1) ]
-y = data[ :, data.shape[ 1 ] - 1 ]
+#data = np.loadtxt('boston_housing.txt')
+#X = data[ :, range(data.shape[ 1 ] - 1) ]
+#y = data[ :, data.shape[ 1 ] - 1 ]
 
 #################### We load concrete dataset ######################################
 #csv = np.genfromtxt ('concrete.csv', delimiter=",",skip_header=1)
@@ -121,19 +122,30 @@ print rmse
 
 ################# EM for RBFNN approach #############################################
 em = EM_net.EM_net(X_train,y_train, n_hidden_units,lam)
-em.pseudoInverse(X_train,y_train)
-rbf_pseudo = em.pseudoPredict(X_test)
-rmse = np.sqrt(np.mean((y_test - rbf_pseudo)**2))
-print 'EM-pseudo'
-print rmse
 
-em.sgd(X_train, y_train)
-rbf_sgd = em.sgdPredict(X_test)
+#em.pseudo_inverse(X_train,y_train)
+#rbf_pseudo = em.pseudo_predict(X_test)
+#rmse = np.sqrt(np.mean((y_test - rbf_pseudo)**2))
+#print 'EM-pseudo'
+#print rmse
+
+
+skip_len=10
+for i in range(0,len(X_train),skip_len):
+    skip = min(i+skip_len,len(X_train)-1)
+    em.sgd(X_train[i:skip],y_train[i:skip])
+    #print 'weights'
+    #print em.get_sgd_weights()
+rbf_sgd = em.sgd_predict(X_test)
 rmse = np.sqrt(np.mean((y_test - rbf_sgd)**2))
+
 print 'EM-sgd'
 print rmse
 
-
+#rbf_sgd = em.sgd_predict(X_train)
+#rmse = np.sqrt(np.mean((y_train - rbf_sgd)**2))
+#print 'EM-sgd-train'
+#print rmse
 
 
 #TODO gradient descent
