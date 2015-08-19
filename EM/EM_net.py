@@ -13,24 +13,31 @@ class EM_net:
         self.c = cluster.KMeans(n_clusters=self.n_units).fit(X_train).cluster_centers_ 
         self.lam = lam 
         self.eta = 1.0
-    def train(self, X_train, y_train):
+        self.w_sgd = np.random.randn(self.n_units)
+    def pseudoInverse(self, X_train, y_train):
         G = []
         for x in X_train:
             G.append(np.exp(-self.lam*np.sum((self.c-x)**2,axis=1)))
         G = np.array(G)
         G_inv = np.linalg.pinv(G)
-        self.w = np.dot(G_inv,y_train)
-        print 'starting grad descent....'
-        self.w2 = np.random.randn(self.n_units)
+        self.w_inv = np.dot(G_inv,y_train)
+    def sgd(self, X_train, y_train):
         for x,y in zip(X_train,y_train):
             rbf_val = np.exp(-self.lam*np.sum((self.c-x)**2,axis=1))
-            rbf_out = np.sum(self.w*rbf_val)
-            self.w2 = self.w2 + self.eta*(y-rbf_out)*rbf_val
-    def predict(self, X_test):    
+            rbf_out = np.sum(self.w_sgd*rbf_val)
+            self.w_sgd = self.w_sgd + self.eta*(y-rbf_out)*rbf_val
+    def pseudoPredict(self, X_test):    
         rbf_val = []
         for x in X_test:
             rbf_val.append(np.exp(-self.lam*np.sum((self.c-x)**2,axis=1)))
         
-        rbf_pseudo = np.sum(self.w*rbf_val,axis=1)
-        rbf_sgd = np.sum(self.w2*rbf_val,axis=1)
-        return (rbf_sgd,rbf_pseudo)
+        rbf_out = np.sum(self.w_inv*rbf_val,axis=1)
+        return rbf_out 
+    def sgdPredict(self, X_test):    
+        rbf_val = []
+        for x in X_test:
+            rbf_val.append(np.exp(-self.lam*np.sum((self.c-x)**2,axis=1)))
+        
+        rbf_out = np.sum(self.w_sgd*rbf_val,axis=1)
+        return rbf_out 
+

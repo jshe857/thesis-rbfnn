@@ -122,14 +122,27 @@ print rmse
 
 ################# EM for RBFNN approach #############################################
 em = EM_net.EM_net(X_train,y_train, n_hidden_units,lam)
-em.train(X_train,y_train)
-(rbf_sgd,rbf_pseudo) = em.predict(X_test)
+em.pseudoInverse(X_train,y_train)
+rbf_pseudo = em.pseudoPredict(X_test)
 rmse = np.sqrt(np.mean((y_test - rbf_pseudo)**2))
 print 'EM-pseudo'
 print rmse
+
+
+rbf_sgd = em.sgdPredict(X_test)
 rmse = np.sqrt(np.mean((y_test - rbf_sgd)**2))
 print 'EM-sgd'
 print rmse
+
+
+em.sgd(X_train, y_train)
+rbf_sgd = em.sgdPredict(X_test)
+rmse = np.sqrt(np.mean((y_test - rbf_sgd)**2))
+print 'EM-sgd'
+print rmse
+
+
+
 
 #TODO gradient descent
 
