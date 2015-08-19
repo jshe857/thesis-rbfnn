@@ -5,8 +5,11 @@ import numpy as np
 from sklearn import svm
 from sklearn import cluster
 import sys
+sys.path.append('EM/')
+import EM_net
 sys.path.append('EP/')
-import PBP_net
+
+import EP_net
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 np.random.seed(1)
@@ -58,28 +61,23 @@ print 'X'
 print X.shape
 print 'y'
 print y.shape
-
-
-
 permutation = np.random.choice(range(X.shape[ 0 ]),
     X.shape[ 0 ], replace = False)
 size_train = np.round(X.shape[ 0 ] * 0.8)
 index_train = permutation[ 0 : size_train ]
 index_test = permutation[ size_train : ]
-
 X_train = X[ index_train, : ]
 y_train = y[ index_train ]
 X_test = X[ index_test, : ]
 y_test = y[ index_test ]
 
-# We construct the network with one hidden layer with two-hidden layers
-# with 50 neurons in each one and normalizing the training features to have
-# zero mean and unit standard deviation in the trainig set.
+
+################### Construct RBFNN #################################################
 lam = 0.01
 n_hidden_units = 10
 # skip_len = 500
-# net = PBP_net.PBP_net(X_train, y_train,
-    # [n_hidden_units ])
+net = EP_net.EP_net(X_train, y_train,
+    [n_hidden_units ])
 
 # m, v, v_noise = net.predict(X_test)
 # rmse_test = np.sqrt(np.mean((y_test - m)**2))
@@ -87,7 +85,7 @@ n_hidden_units = 10
 # m, v, v_noise = net.predict(X_train)
 # rmse_train = np.sqrt(np.mean((y_train - m)**2))
 
-# Start plot
+################## Start plot #######################################################
 #plt.ion()
 #plt.show()
 #patch_test = mpatches.Patch(color='blue', label='rmse_test')
@@ -97,8 +95,8 @@ n_hidden_units = 10
 #plt.plot(0,rmse_train,'ro',label='train')
 #plt.draw()
 
+################# Plot RMSE as we go ################################################
 #run = 1
-
 #for j in range(40):
     #print '============iteration================'
 #We make predictions for the test set
@@ -115,23 +113,17 @@ n_hidden_units = 10
         #plt.draw()
         #run += 1
 # We compute the test RMSE
-# net.train(X_train,y_train,40)
-# m, v, v_noise = net.predict(X_test)
-# rmse = np.sqrt(np.mean((y_test - m)**2))
+net.train(X_train,y_train,40)
+m, v, v_noise = net.predict(X_test)
+rmse = np.sqrt(np.mean((y_test - m)**2))
+print 
+print 'rmse'
+print rmse
 
-
-#EM for RBFNN approach
-centers = cluster.KMeans(n_clusters=n_hidden_units).fit(X_train).cluster_centers_ 
-G = []
-for x in X_train:
-    G.append(np.exp(-lam*np.sum((centers-x)**2,axis=1)))
-G = np.array(G)
-G_inv = np.linalg.pinv(G)
-w = np.dot(G_inv,y_train)
-rbf_in = []
-for x in X_test:
-    rbf_in.append(np.exp(-lam*np.sum((centers-x)**2,axis=1)))
-rbf_out = np.sum(w*rbf_in,axis=1)
+################# EM for RBFNN approach #############################################
+em = EM_net.EM_net(X_train,y_train, n_hidden_units,lam)
+em.train(X_train,y_train)
+rbf_out = em.predict(X_test)
 rmse = np.sqrt(np.mean((y_test - rbf_out)**2))
 print 'EM'
 print rmse

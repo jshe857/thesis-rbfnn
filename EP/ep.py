@@ -13,7 +13,7 @@ import network
 
 import prior
 
-class PBP:
+class EP:
 
     def __init__(self, layer_sizes, mean_y_train, std_y_train):
 

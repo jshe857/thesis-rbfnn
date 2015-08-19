@@ -5,9 +5,9 @@ import pickle
 
 import gzip
 
-import pbp
+import ep
 
-class PBP_net:
+class EP_net:
 
     def __init__(self, X_train, y_train, n_hidden):
 
@@ -52,7 +52,7 @@ class PBP_net:
         n_units_per_layer = \
             np.concatenate(([ X_train.shape[ 1 ] ], n_hidden, [ 1 ]))
         self.pbp_instance = \
-            pbp.PBP(n_units_per_layer, self.mean_y_train, self.std_y_train)
+            ep.EP(n_units_per_layer, self.mean_y_train, self.std_y_train)
 
         # We iterate the learning process
 
