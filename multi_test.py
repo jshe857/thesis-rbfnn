@@ -3,6 +3,7 @@ import math
 import time
 import numpy as np
 from sklearn import svm
+from sklearn import cluster
 import sys
 sys.path.append('EP/')
 import PBP_net
@@ -11,23 +12,23 @@ import matplotlib.patches as mpatches
 np.random.seed(1)
 
 #################### We load artificial data from an RBFNN ########################
-n_dim = 10
-n_nodes = 10
-n_pts = 100
-c = np.random.rand(n_nodes,n_dim)*2
-w = np.random.rand(n_nodes,1)*3
-#generate random inputs with gaussian noise
-X =  (np.random.rand(n_pts,n_dim) - 0.5)*4 + np.random.randn(n_pts,n_dim)
-y = []
-for x_in in X:
-     rbfs = np.exp(-0.1*np.sum((x_in - c)**2,axis=1))
-     y.append(np.sum(w*rbfs))
+# n_dim = 10
+# n_nodes = 10
+# n_pts = 100
+# c = np.random.rand(n_nodes,n_dim)*2
+# w = np.random.rand(n_nodes,1)*3
+# #generate random inputs with gaussian noise
+# X =  (np.random.rand(n_pts,n_dim) - 0.5)*4 + np.random.randn(n_pts,n_dim)
+# y = []
+# for x_in in X:
+     # rbfs = np.exp(-0.1*np.sum((x_in - c)**2,axis=1))
+     # y.append(np.sum(w*rbfs))
 
-y = np.array(y + 1*np.random.randn(n_pts))
+# y = np.array(y + 1*np.random.randn(n_pts))
 #################### We load the boston housing dataset ###########################
-#data = np.loadtxt('boston_housing.txt')
-#X = data[ :, range(data.shape[ 1 ] - 1) ]
-#y = data[ :, data.shape[ 1 ] - 1 ]
+data = np.loadtxt('boston_housing.txt')
+X = data[ :, range(data.shape[ 1 ] - 1) ]
+y = data[ :, data.shape[ 1 ] - 1 ]
 
 #################### We load concrete dataset ######################################
 #csv = np.genfromtxt ('concrete.csv', delimiter=",",skip_header=1)
@@ -53,8 +54,9 @@ y = np.array(y + 1*np.random.randn(n_pts))
 
 
 # We create the train and test sets with 80% and 20% of the data
-
+print 'X'
 print X.shape
+print 'y'
 print y.shape
 
 
@@ -73,17 +75,17 @@ y_test = y[ index_test ]
 # We construct the network with one hidden layer with two-hidden layers
 # with 50 neurons in each one and normalizing the training features to have
 # zero mean and unit standard deviation in the trainig set.
-
+lam = 0.01
 n_hidden_units = 10
-skip_len = 500
-net = PBP_net.PBP_net(X_train, y_train,
-    [n_hidden_units ])
+# skip_len = 500
+# net = PBP_net.PBP_net(X_train, y_train,
+    # [n_hidden_units ])
 
-m, v, v_noise = net.predict(X_test)
-rmse_test = np.sqrt(np.mean((y_test - m)**2))
+# m, v, v_noise = net.predict(X_test)
+# rmse_test = np.sqrt(np.mean((y_test - m)**2))
 
-m, v, v_noise = net.predict(X_train)
-rmse_train = np.sqrt(np.mean((y_train - m)**2))
+# m, v, v_noise = net.predict(X_train)
+# rmse_train = np.sqrt(np.mean((y_train - m)**2))
 
 # Start plot
 #plt.ion()
@@ -113,19 +115,35 @@ rmse_train = np.sqrt(np.mean((y_train - m)**2))
         #plt.draw()
         #run += 1
 # We compute the test RMSE
-net.train(X_train,y_train,40)
-m, v, v_noise = net.predict(X_test)
-rmse = np.sqrt(np.mean((y_test - m)**2))
-print
-print 'rmse'
+# net.train(X_train,y_train,40)
+# m, v, v_noise = net.predict(X_test)
+# rmse = np.sqrt(np.mean((y_test - m)**2))
+
+
+#EM for RBFNN approach
+centers = cluster.KMeans(n_clusters=n_hidden_units).fit(X_train).cluster_centers_ 
+G = []
+for x in X_train:
+    G.append(np.exp(-lam*np.sum((centers-x)**2,axis=1)))
+G = np.array(G)
+G_inv = np.linalg.pinv(G)
+w = np.dot(G_inv,y_train)
+rbf_in = []
+for x in X_test:
+    rbf_in.append(np.exp(-lam*np.sum((centers-x)**2,axis=1)))
+rbf_out = np.sum(w*rbf_in,axis=1)
+rmse = np.sqrt(np.mean((y_test - rbf_out)**2))
+print 'EM'
 print rmse
+
+#TODO gradient descent
 
 # We compute the test log-likelihood
 
-test_ll = np.mean(-0.5 * np.log(2 * math.pi * (v + v_noise)) - \
-    0.5 * (y_test - m)**2 /(v + v_noise))
-print "test_log likelihood"
-print test_ll
+# test_ll = np.mean(-0.5 * np.log(2 * math.pi * (v + v_noise)) - \
+    # 0.5 * (y_test - m)**2 /(v + v_noise))
+# print "test_log likelihood"
+# print test_ll
 
 result = svm.SVR().fit(X_train,y_train).predict(X_test) 
 svr_res = np.sqrt(np.mean((y_test - result)**2))
