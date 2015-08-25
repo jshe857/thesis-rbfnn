@@ -1,3 +1,4 @@
 *.pyc
 large-data/*
 result.png
+data/*
