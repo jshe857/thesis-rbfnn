@@ -12,7 +12,7 @@ import EP_net
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 np.random.seed(10)
-
+matplotlib.use('pgf')
 #################### We load artificial data from an RBFNN ########################
 # n_dim = 10
 # n_nodes = 10
@@ -57,10 +57,10 @@ y = data[ :, data.shape[ 1 ] - 1 ]
 
 
 # # We create the train and test sets with 80% and 20% of the data
-print 'X'
-print X.shape
-print 'y'
-print y.shape
+#print 'X'
+#print X.shape
+#print 'y'
+#print y.shape
 
 permutation = np.random.choice(range(X.shape[ 0 ]),
     X.shape[ 0 ], replace = False)
@@ -77,6 +77,10 @@ y_test = y[ index_test ]
 lam = 0.08
 var_prior = 1.0 
 n_hidden_units = 100
+print 'lam: ' + str(lam)
+print 'var_prior: ' + str(var_prior)
+print 'n_hidden_units: ' + str(n_hidden_units)
+
 # skip_len = 500
 net = EP_net.EP_net(X_train, y_train,
     [n_hidden_units ],lam,var_prior)

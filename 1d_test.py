@@ -8,6 +8,8 @@ sys.path.append('EP/')
 import EP_net
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
+import matplotlib
+matplotlib.use('pgf')
 np.random.seed(1)
 
 
@@ -65,7 +67,8 @@ plt.title('n='+str(size_train))
 plt.legend(handles=[red_patch,blue_patch],loc=2)
 fig = plt.gcf()
 plt.show()
-fig.savefig('test_1d_train'+str(size_train)+'lam'+ str(lam)+'prior'+ str(var_prior)+'.eps', format='eps', dpi=500)
+#fig.savefig('test_1d_train'+str(size_train)+'lam'+ str(lam)+'prior'+ str(var_prior)+'.eps', format='eps', dpi=500)
+fig.savefig('test_1d_train'+str(size_train)+'lam'+ str(lam)+'prior'+ str(var_prior)+'.pgf')
 # We make predictions for the test set
 #skip_len = 10
 #for i in range(0,len(X_train),skip_len):
