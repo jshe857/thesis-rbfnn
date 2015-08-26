@@ -13,7 +13,12 @@ np.random.seed(1)
 
 # We create the train and test sets with 90% and 10% of the data
 #Generate artificial data
-num_pts = 200 
+num_train = 200
+num_test = 25
+num_pts = num_train + num_test
+x_true =  np.linspace(-50,50,num=200)
+y_true = 2*np.cos(x_true/5) +  2*np.sin(x_true/30) 
+
 x_pts =  np.linspace(-50,50,num=num_pts)
 X = np.array([x_pts]).T
 y = 10*np.exp(-0.05*np.absolute(x_pts - 60)) + 10*np.exp(-0.05*np.absolute(x_pts)) +  0*x_pts + 1*np.random.randn(num_pts)
@@ -24,7 +29,7 @@ print X.shape
 print y.shape
 permutation = np.random.choice(range(X.shape[ 0 ]),
     X.shape[ 0 ], replace = False)
-size_train = np.round(X.shape[ 0 ] * 0.95)
+size_train = num_train
 index_train = permutation[ 0 : size_train ]
 index_test = permutation[ size_train : ]
 
@@ -36,9 +41,9 @@ y_test = y[ index_test ]
 # We construct the network with one hidden layer with two-hidden layers
 # with 50 neurons in each one and normalizing the training features to have
 # zero mean and unit standard deviation in the trainig set.
-lam = 12
-var_prior = 1
-n_hidden_units = 40
+lam = 15
+var_prior = 2
+n_hidden_units = 100
 net = EP_net.EP_net(X_train, y_train,
     [n_hidden_units],lam,var_prior)
 
@@ -48,13 +53,19 @@ net = EP_net.EP_net(X_train, y_train,
 
 net.train(X_train,y_train,40)
 m, v, v_noise = net.predict(X_test)
-plt.plot(X_test,y_test,'ro')
+plt.plot(x_true,y_true,'r')
 plt.errorbar(X_test,m,fmt='bx',yerr= 4*np.sqrt(v))
-red_patch = mpatches.Patch(color='red', label='Test data')
+#plt.plot(X_train,y_train,'go')
+red_patch = mpatches.Patch(color='red', label='True function')
 blue_patch = mpatches.Patch(color='blue', label='Prediction')
-plt.legend(handles=[red_patch,blue_patch])
+#green_patch = mpatches.Patch(color='green', label='Training Data')
+plt.ylabel('y')
+plt.xlabel('x')
+plt.title('n='+str(size_train))
+plt.legend(handles=[red_patch,blue_patch],loc=2)
+fig = plt.gcf()
 plt.show()
-
+fig.savefig('test_1d_train'+str(size_train)+'lam'+ str(lam)+'prior'+ str(var_prior)+'.eps', format='eps', dpi=500)
 # We make predictions for the test set
 #skip_len = 10
 #for i in range(0,len(X_train),skip_len):
