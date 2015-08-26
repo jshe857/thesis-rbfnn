@@ -13,7 +13,7 @@ np.random.seed(1)
 
 # We create the train and test sets with 90% and 10% of the data
 #Generate artificial data
-num_pts = 100
+num_pts = 200 
 x_pts =  np.linspace(-50,50,num=num_pts)
 X = np.array([x_pts]).T
 y = 10*np.exp(-0.05*np.absolute(x_pts - 60)) + 10*np.exp(-0.05*np.absolute(x_pts)) +  0*x_pts + 1*np.random.randn(num_pts)
@@ -24,7 +24,7 @@ print X.shape
 print y.shape
 permutation = np.random.choice(range(X.shape[ 0 ]),
     X.shape[ 0 ], replace = False)
-size_train = np.round(X.shape[ 0 ] * 0.9)
+size_train = np.round(X.shape[ 0 ] * 0.95)
 index_train = permutation[ 0 : size_train ]
 index_test = permutation[ size_train : ]
 
@@ -36,10 +36,11 @@ y_test = y[ index_test ]
 # We construct the network with one hidden layer with two-hidden layers
 # with 50 neurons in each one and normalizing the training features to have
 # zero mean and unit standard deviation in the trainig set.
-lam = 10
-n_hidden_units = 100
+lam = 12
+var_prior = 1
+n_hidden_units = 40
 net = EP_net.EP_net(X_train, y_train,
-    [n_hidden_units],lam)
+    [n_hidden_units],lam,var_prior)
 
 #m, v, v_noise = net.predict(X_test)
 #plt.plot(X_test,y_test,'ro',X_test,m,'bx')
@@ -48,7 +49,7 @@ net = EP_net.EP_net(X_train, y_train,
 net.train(X_train,y_train,40)
 m, v, v_noise = net.predict(X_test)
 plt.plot(X_test,y_test,'ro')
-plt.errorbar(X_test,m,fmt='bx',yerr= 2*np.sqrt(v))
+plt.errorbar(X_test,m,fmt='bx',yerr= 4*np.sqrt(v))
 red_patch = mpatches.Patch(color='red', label='Test data')
 blue_patch = mpatches.Patch(color='blue', label='Prediction')
 plt.legend(handles=[red_patch,blue_patch])
@@ -81,7 +82,7 @@ print "test_log likelihood"
 print test_ll
 
 ################# EM for RBFNN approach #############################################
-em = EM_net.EM_net(X_train,y_train, n_hidden_units,lam,eta=0.9,a=0)
+em = EM_net.EM_net(X_train,y_train, n_hidden_units,lam,eta=1.1,a=0.1)
 
 #em.pseudo_inverse(X_train,y_train)
 #rbf_pseudo = em.pseudo_predict(X_test)

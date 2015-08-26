@@ -11,56 +11,57 @@ sys.path.append('EP/')
 import EP_net
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
-np.random.seed(1)
+np.random.seed(10)
 
 #################### We load artificial data from an RBFNN ########################
-n_dim = 10
-n_nodes = 10
-n_pts = 1000
-#c = np.random.rand(n_nodes,n_dim)*2
-#w = np.random.rand(n_nodes,1)*3
-#generate random inputs with gaussian noise
-#X =  (np.random.rand(n_pts,n_dim) - 0.5)*4 + np.random.randn(n_pts,n_dim)
-#y = []
-#for x_in in X:
-     ##rbfs = np.exp(-0.1*np.sum((x_in - c)**2,axis=1))
-     ##y.append(np.sum(w*rbfs))
-     #sins = np.sin(2*x_in)
-     #y.append(np.sum(2*sins))
-#y = np.array(y + 1*np.random.randn(n_pts))
+# n_dim = 10
+# n_nodes = 10
+# n_pts = 100
+# c = np.random.rand(n_nodes,n_dim)*2
+# w = np.random.rand(n_nodes,1)*3
+# # generate random inputs with gaussian noise
+# X =  (np.random.rand(n_pts,n_dim) - 0.5)*4 + np.random.randn(n_pts,n_dim)
+# y = []
+# for x_in in X:
+     # #rbfs = np.exp(-0.1*np.sum((x_in - c)**2,axis=1))
+     # #y.append(np.sum(w*rbfs))
+     # sins = np.sin(2*x_in)
+     # y.append(np.sum(2*sins))
+# y = np.array(y + 1*np.random.randn(n_pts))
 #################### We load the boston housing dataset ###########################
 data = np.loadtxt('boston_housing.txt')
 X = data[ :, range(data.shape[ 1 ] - 1) ]
 y = data[ :, data.shape[ 1 ] - 1 ]
 
 #################### We load concrete dataset ######################################
-#csv = np.genfromtxt ('concrete.csv', delimiter=",",skip_header=1)
-#X = csv[ :, range(csv.shape[ 1 ] - 3) ]
-#y = csv[ :, csv.shape[ 1 ] - 1 ]
+# csv = np.genfromtxt ('concrete.csv', delimiter=",",skip_header=1)
+# X = csv[ :, range(csv.shape[ 1 ] - 3) ]
+# y = csv[ :, csv.shape[ 1 ] - 1 ]
 
 ##################### We load forestfires dataset #################################
-#csv = np.genfromtxt ('forestfires.csv', delimiter=",",skip_header=1)
+# csv = np.genfromtxt ('forestfires.csv', delimiter=",",skip_header=1)
 
-#ind = range(csv.shape[ 1 ] - 1)
-#ind = [x for x in ind if (x != 2 and x != 3)]
-#X = csv[ :,ind]
-#y = csv[ :, csv.shape[ 1 ] - 1 ]
+# ind = range(csv.shape[ 1 ] - 1)
+# ind = [x for x in ind if (x != 2 and x != 3)]
+# X = csv[ :,ind]
+# y = csv[ :, csv.shape[ 1 ] - 1 ]
 
-#for i in range(len(y)):
-    #if y[i] > 0:
-        #y[i] = np.log(y[i])
+# for i in range(len(y)):
+    # if y[i] > 0:
+        # y[i] = np.log(y[i])
 
 ###################### We load the word music dataset ###############################
-#csv = np.genfromtxt ('music.csv', delimiter=",",skip_header=1)
-#X = csv[ :, range(csv.shape[ 1 ] - 2) ]
-#y = csv[ :, csv.shape[ 1 ] - 1 ]
+# csv = np.genfromtxt ('music.csv', delimiter=",",skip_header=1)
+# X = csv[ :, range(csv.shape[ 1 ] - 2) ]
+# y = csv[ :, csv.shape[ 1 ] - 1 ]
 
 
-# We create the train and test sets with 80% and 20% of the data
+# # We create the train and test sets with 80% and 20% of the data
 print 'X'
 print X.shape
 print 'y'
 print y.shape
+
 permutation = np.random.choice(range(X.shape[ 0 ]),
     X.shape[ 0 ], replace = False)
 size_train = np.round(X.shape[ 0 ] * 0.8)
@@ -73,11 +74,12 @@ y_test = y[ index_test ]
 
 
 ################### Construct RBFNN #################################################
-lam = 0.01
-n_hidden_units = 10
+lam = 0.08
+var_prior = 1.0 
+n_hidden_units = 100
 # skip_len = 500
 net = EP_net.EP_net(X_train, y_train,
-    [n_hidden_units ],lam)
+    [n_hidden_units ],lam,var_prior)
 
 # m, v, v_noise = net.predict(X_test)
 # rmse_test = np.sqrt(np.mean((y_test - m)**2))
@@ -114,8 +116,15 @@ net = EP_net.EP_net(X_train, y_train,
         #run += 1
 # We compute the test RMSE
 net.train(X_train,y_train,40)
+# y_test = y_test[0:10]
+# X_test = X_test[0:10]
 m, v, v_noise = net.predict(X_test)
+print
+print v_noise
 rmse = np.sqrt(np.mean((y_test - m)**2))
+plt.errorbar(range(len(m)),m,fmt='bx',yerr=2*np.sqrt(v))
+plt.plot(range(len(m)),y_test,'ro')
+plt.show()
 print 
 print '====================EP========================'
 print 'test error'
@@ -125,6 +134,7 @@ m, v, v_noise = net.predict(X_train)
 rmse = np.sqrt(np.mean((y_train - m)**2))
 print 'train error'
 print rmse
+
 ################# EM for RBFNN approach #############################################
 em = EM_net.EM_net(X_train,y_train, n_hidden_units,lam)
 

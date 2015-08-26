@@ -9,7 +9,7 @@ import ep
 
 class EP_net:
 
-    def __init__(self, X_train, y_train, n_hidden,lam):
+    def __init__(self, X_train, y_train, n_hidden,lam, var_prior):
 
         """
             Constructor for the class implementing a Bayesian neural network
@@ -52,7 +52,7 @@ class EP_net:
         n_units_per_layer = \
             np.concatenate(([ X_train.shape[ 1 ] ], n_hidden, [ 1 ]))
         self.ep_instance = \
-            ep.EP(n_units_per_layer, self.mean_y_train, self.std_y_train,lam)
+            ep.EP(n_units_per_layer, self.mean_y_train, self.std_y_train,lam,var_prior)
 
         # We iterate the learning process
 

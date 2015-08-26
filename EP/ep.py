@@ -15,9 +15,8 @@ import prior
 
 class EP:
 
-    def __init__(self, layer_sizes, mean_y_train, std_y_train,lam):
+    def __init__(self, layer_sizes, mean_y_train, std_y_train,lam,var_targets=1):
 
-        var_targets = 1
         self.std_y_train = std_y_train
         self.mean_y_train = mean_y_train
 
