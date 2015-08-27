@@ -6,25 +6,34 @@ sys.path.append('EM/')
 import EM_net
 sys.path.append('EP/')
 import EP_net
+
+# import matplotlib
+# matplotlib.use('pgf')
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
-import matplotlib
-matplotlib.use('pgf')
 np.random.seed(1)
 
 
 # We create the train and test sets with 90% and 10% of the data
 #Generate artificial data
-num_train = 200
+num_train = 1000
 num_test = 25
-num_pts = num_train + num_test
-x_true =  np.linspace(-50,50,num=200)
-y_true = 2*np.cos(x_true/5) +  2*np.sin(x_true/30) 
 
-x_pts =  np.linspace(-50,50,num=num_pts)
-X = np.array([x_pts]).T
-y = 10*np.exp(-0.05*np.absolute(x_pts - 60)) + 10*np.exp(-0.05*np.absolute(x_pts)) +  0*x_pts + 1*np.random.randn(num_pts)
-y = 2*np.cos(x_pts/5) +  2*np.sin(x_pts/30) + 0.1*np.random.randn(num_pts)
+def generate_xy(rng,num,noise=True):
+    x_pts =  np.linspace(-rng,rng,num=num)
+    X = np.array([x_pts]).T
+    if (noise):
+        y = 3*np.cos(x_pts/9) +  2*np.sin(x_pts/15) + 0.1*np.random.randn(num)
+    else:
+        y = 3*np.cos(x_pts/9) +  2*np.sin(x_pts/15)
+    return(X,y)
+
+rng = 80
+X,y = generate_xy(rng,num_train)
+
+
+x_true,y_true = generate_xy(rng,200,noise=False)
+
 
 
 print X.shape
@@ -37,15 +46,19 @@ index_test = permutation[ size_train : ]
 
 X_train = X[ index_train, : ]
 y_train = y[ index_train ]
-X_test = X[ index_test, : ]
-y_test = y[ index_test ]
+# X_test = X[ index_test, : ]
+# y_test = y[ index_test ]
+
+X_test,y_test = generate_xy(rng,num_test)
+
+
 
 # We construct the network with one hidden layer with two-hidden layers
 # with 50 neurons in each one and normalizing the training features to have
 # zero mean and unit standard deviation in the trainig set.
-lam = 15
+lam = 12
 var_prior = 2
-n_hidden_units = 100
+n_hidden_units = 200
 net = EP_net.EP_net(X_train, y_train,
     [n_hidden_units],lam,var_prior)
 
@@ -56,7 +69,7 @@ net = EP_net.EP_net(X_train, y_train,
 net.train(X_train,y_train,40)
 m, v, v_noise = net.predict(X_test)
 plt.plot(x_true,y_true,'r')
-plt.errorbar(X_test,m,fmt='bx',yerr= 4*np.sqrt(v))
+plt.errorbar(X_test,m,fmt='bx',yerr= 2*np.sqrt(v))
 #plt.plot(X_train,y_train,'go')
 red_patch = mpatches.Patch(color='red', label='True function')
 blue_patch = mpatches.Patch(color='blue', label='Prediction')
@@ -96,6 +109,7 @@ print "test_log likelihood"
 print test_ll
 
 ################# EM for RBFNN approach #############################################
+if (n_hidden_units > num_train): sys.exit() 
 em = EM_net.EM_net(X_train,y_train, n_hidden_units,lam,eta=1.1,a=0.1)
 
 #em.pseudo_inverse(X_train,y_train)
