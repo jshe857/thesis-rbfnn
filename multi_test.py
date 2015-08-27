@@ -9,10 +9,11 @@ sys.path.append('EM/')
 import EM_net
 sys.path.append('EP/')
 import EP_net
+import matplotlib
+matplotlib.use('pgf')
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 np.random.seed(10)
-matplotlib.use('pgf')
 #################### We load artificial data from an RBFNN ########################
 # n_dim = 10
 # n_nodes = 10
