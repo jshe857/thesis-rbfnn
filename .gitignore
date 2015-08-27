@@ -3,4 +3,5 @@ large-data/*
 result.png
 data/*
 *.eps
+*.pgf
 Data/*
