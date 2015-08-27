@@ -80,8 +80,8 @@ plt.title('n='+str(size_train))
 plt.legend(handles=[red_patch,blue_patch],loc=2)
 fig = plt.gcf()
 plt.show()
-#fig.savefig('test_1d_train'+str(size_train)+'lam'+ str(lam)+'prior'+ str(var_prior)+'.eps', format='eps', dpi=500)
-fig.savefig('test_1d_train'+str(size_train)+'lam'+ str(lam)+'prior'+ str(var_prior)+'.pgf')
+fig.savefig('test_1d_train'+str(size_train)+'lam'+ str(lam)+'prior'+ str(var_prior)+'.eps', format='eps', dpi=500)
+# fig.savefig('test_1d_train'+str(size_train)+'lam'+ str(lam)+'prior'+ str(var_prior)+'.eps')
 # We make predictions for the test set
 #skip_len = 10
 #for i in range(0,len(X_train),skip_len):
