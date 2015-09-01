@@ -1,0 +1,5 @@
+Boston Housing Optimal HyperParameter
+(304, 13)
+(101, 13)
+(101, 13)
+{'a': 0, 'lam_em': 0.01, 'eta': 0.1, 'res_test_em': 8.6506759744407038, 'lam': 0.05, 'n_em': 50, 'res_train_ep': 3.7136667547938353, 'res_train_em': 8.3783411241245052, 'var_prior': 0.7, 'n': 50, 'res_test_ep': 4.3746493464934586}
