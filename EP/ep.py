@@ -66,8 +66,8 @@ class EP:
             params = self.prior.refine_prior(params)
             self.network.set_params(params)
 
-            sys.stdout.write('{}'.format(0))
-            sys.stdout.flush()
+            #sys.stdout.write('{}'.format(0))
+            #sys.stdout.flush()
 
             for i in range(int(n_iterations) - 1):
 
@@ -82,8 +82,8 @@ class EP:
                 params = self.prior.refine_prior(params)
                 self.network.set_params(params)
 
-                sys.stdout.write('{}'.format(i + 1))
-                sys.stdout.flush()
+                #sys.stdout.write('{}'.format(i + 1))
+                #sys.stdout.flush()
 
     def get_deterministic_output(self, X_test):
 
@@ -123,14 +123,14 @@ class EP:
             self.network.remove_invalid_updates(new_params, old_params)
             self.network.set_params(new_params)
 
-            if counter % 1000 == 0:
-                sys.stdout.write('.')
-                sys.stdout.flush()
+            #if counter % 1000 == 0:
+                #sys.stdout.write('.')
+                #sys.stdout.flush()
 
-            counter += 1
+            #counter += 1
 
-        sys.stdout.write('')
-        sys.stdout.flush()
+        #sys.stdout.write('')
+        #sys.stdout.flush()
 
     def sample_w(self):
 

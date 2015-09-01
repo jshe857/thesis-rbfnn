@@ -19,9 +19,6 @@ def ep_run(X_train,y_train,X_test,y_test,n_hidden_units,lam=0.1,var_prior=1):
     m, v, v_noise = net.predict(X_test)
     test_res = np.sqrt(np.mean((y_test - m)**2))
     # plt.plot(n,result)
-
-
-    print 
     # print '====================EP========================'
     # print 'test error'
     # print rmse

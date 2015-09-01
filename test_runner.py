@@ -27,6 +27,12 @@ import Data
 data = np.loadtxt('boston_housing.txt')
 X = data[ :, range(data.shape[ 1 ] - 1) ]
 y = data[ :, data.shape[ 1 ] - 1 ]
+n = 50
+a = 0
+eta = 0.0212
+lam_em = 0.01
+lam = 0.05
+var_prior = 0.76
 #################### We load concrete dataset ######################################
 #csv = np.genfromtxt ('concrete.csv', delimiter=",",skip_header=1)
 #X = csv[ :, range(csv.shape[ 1 ] - 3) ]
@@ -58,21 +64,11 @@ y_train = dataset['y_train']
 X_test = dataset['X_test']
 y_test = dataset['y_test']
 # Find Optimal Hyperparameter Setting
-lam_arr = [0.01,0.05,0.1,1,10]
-a_arr = [0.001,0.01,0.1,0.5,1]
-eta_arr = [0.01,0.1,0.3,0.5,0.7,0.9,1,1.1]
-n_hidden_units_arr = [10,20,30,50]
-var_prior_arr = [0.1,0.5,0.7,1,1.1,1.5,2,4]
-n = 30
-a = 0.01
-eta = 0.7
-lam = 0.01
-var_prior = 1
 print '==========================EP========================'
 print EP_run.ep_run(X_train,y_train,X_test,y_test,n,lam=lam,var_prior=var_prior) 
 print '==========================EM========================'
 
-print EM_run.em_run(X_train,y_train,X_test,y_test,n,lam=lam,eta=eta,a=a) 
+print EM_run.em_run(X_train,y_train,X_test,y_test,n,lam=lam_em,eta=eta,a=a) 
 # Development Set
 
 

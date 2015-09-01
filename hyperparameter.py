@@ -27,10 +27,10 @@ import Data
 # print 'Artificial Optimal HyperParameter'
 
 #################### We load the boston housing dataset ###########################
-data = np.loadtxt('boston_housing.txt')
-X = data[ :, range(data.shape[ 1 ] - 1) ]
-y = data[ :, data.shape[ 1 ] - 1 ]
-print 'Boston Housing Optimal HyperParameter'
+#data = np.loadtxt('boston_housing.txt')
+#X = data[ :, range(data.shape[ 1 ] - 1) ]
+#y = data[ :, data.shape[ 1 ] - 1 ]
+#print 'Boston Housing Optimal HyperParameter'
 #################### We load concrete dataset ######################################
 #csv = np.genfromtxt ('concrete.csv', delimiter=",",skip_header=1)
 #X = csv[ :, range(csv.shape[ 1 ] - 3) ]
@@ -65,37 +65,68 @@ y_dev = dataset['y_dev']
 
 # Find Optimal Hyperparameter Setting
 lam_arr = [0.01,0.05,0.1,1,10]
-a_arr = [0.001,0.01,0.1,0.5,1]
+a_arr = [0,0.001,0.01,0.1,0.5,1]
 eta_arr = [0.01,0.1,0.3,0.5,0.7,0.9,1,1.1]
 n_arr = [10,20,30,50]
-var_prior_arr = [0.1,0.5,0.7,1,1.1,1.5,2,4]
+var_prior_arr = [0.1,0.5,0.7,1,1.1,1.5,2]
 
+#boston housing
+pts = 6
 best_ep = 1e6
 best_em = 1e6
 params = {}
+lam_arr = np.linspace(0.01,0.05,pts)
+eta_arr = np.linspace(0.008,0.03,pts)
+n_arr = [30,40,50]
+var_prior_arr = np.linspace(0.6,0.8,pts)
 
 for lam in lam_arr:
     for n in n_arr:
 ###############################FOR EP################################################
         for var_prior in var_prior_arr:
             res = EP_run.ep_run(X_train,y_train,X_dev,y_dev,n,lam=lam,var_prior=var_prior)
-            err = 0.5*(res['test'] + res['train'])
+            err = res['test']
+            res = EP_run.ep_run(X_train,y_train,X_dev,y_dev,n,lam=lam,var_prior=var_prior)
+            err += res['test']
+            res = EP_run.ep_run(X_train,y_train,X_dev,y_dev,n,lam=lam,var_prior=var_prior)
+            err += res['test']
+            res = EP_run.ep_run(X_train,y_train,X_dev,y_dev,n,lam=lam,var_prior=var_prior)
+            err += res['test']
+            res = EP_run.ep_run(X_train,y_train,X_dev,y_dev,n,lam=lam,var_prior=var_prior)
+            err += res['test']
             if err < best_ep:
                best_ep = err
                params['lam'] = lam
                params['n'] = n
                params['var_prior'] = var_prior
+               params['res_test_ep'] = res['test']
+               params['res_train_ep'] = res['train']
 ###############################FOR EM################################################
         for eta in eta_arr:
             for a in a_arr:
                 res = EM_run.em_run(X_train,y_train,X_dev,y_dev,n,
                         lam=lam,eta=eta,a=a)
+                err = res['test'] 
+                res = EM_run.em_run(X_train,y_train,X_dev,y_dev,n,
+                        lam=lam,eta=eta,a=a)
+                err += res['test'] 
+                res = EM_run.em_run(X_train,y_train,X_dev,y_dev,n,
+                        lam=lam,eta=eta,a=a)
+                err += res['test'] 
+                res = EM_run.em_run(X_train,y_train,X_dev,y_dev,n,
+                        lam=lam,eta=eta,a=a)
+                err += res['test'] 
+                res = EM_run.em_run(X_train,y_train,X_dev,y_dev,n,
+                        lam=lam,eta=eta,a=a)
+                err += res['test'] 
                 if err < best_em:
                    best_em = err
                    params['lam_em'] = lam
                    params['n_em'] = n
                    params['eta'] = eta
                    params['a'] = a
+                   params['res_test_em'] = res['test']
+                   params['res_train_em'] = res['train']
 
 
 print params
