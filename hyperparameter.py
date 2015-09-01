@@ -4,7 +4,7 @@ import time
 import numpy as np
 import EP_run
 import EM_run
-import partition_data
+import Data
 
 #################### We load artificial data from an RBFNN ########################
 # n_dim = 10
@@ -70,17 +70,35 @@ eta_arr = [0.01,0.1,0.3,0.5,0.7,0.9,1,1.1]
 n_arr = [10,20,30,50]
 var_prior_arr = [0.1,0.5,0.7,1,1.1,1.5,2,4]
 
-a = 0.01
-eta = 0.7
-lam = 0.01
-# for n in n_arr:
-   # ep_run 
+best_ep = 1e6
+best_em = 1e6
+params = {}
 
-# Development Set
+for lam in lam_arr:
+    for n in n_arr:
+###############################FOR EP################################################
+        for var_prior in var_prior_arr:
+            res = EP_run.ep_run(X_train,y_train,X_dev,y_dev,n,lam=lam,var_prior=var_prior)
+            err = 0.5*(res['test'] + res['train'])
+            if err < best_ep:
+               best_ep = err
+               params['lam'] = lam
+               params['n'] = n
+               params['var_prior'] = var_prior
+###############################FOR EM################################################
+        for eta in eta_arr:
+            for a in a_arr:
+                res = EM_run.em_run(X_train,y_train,X_dev,y_dev,n,
+                        lam=lam,eta=eta,a=a)
+                if err < best_em:
+                   best_em = err
+                   params['lam_em'] = lam
+                   params['n_em'] = n
+                   params['eta'] = eta
+                   params['a'] = a
 
 
-# Perform K-fold cross validation
-
+print params
 
 
 
