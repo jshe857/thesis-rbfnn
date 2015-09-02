@@ -1,0 +1,14 @@
+Concrete Optimal HyperParameter
+(62, 8)
+(21, 8)
+(20, 8)
+{'a': 0.001, 'lam_em': 0.01, 'eta': 0.01, 'res_test_em': 7.2029095673461265, 'lam': 0.05, 'n_em': 30, 'res_train_ep': 2.2354452882333411, 'res_train_em': 8.6186415131438618, 'var_prior': 1.1, 'n': 30, 'res_test_ep': 2.545495573908664}
+(62, 8)
+(21, 8)
+(20, 8)
+{'a': 0, 'lam_em': 0.01, 'eta': 0.9, 'res_test_em': 14.953393995904612, 'lam': 0.05, 'n_em': 30, 'res_train_ep': 12.311623949744819, 'res_train_em': 19.48290991440053, 'var_prior': 1, 'n': 20, 'res_test_ep': 13.314872384763451}
+Forestfires Optimal HyperParameter
+(310, 10)
+(103, 10)
+(104, 10)
+{'a': 0, 'lam_em': 0.1, 'eta': 0.1, 'res_test_em': 1.4687478996276615, 'lam': 0.01, 'n_em': 50, 'res_train_ep': 1.4507365929266456, 'res_train_em': 1.4458963848308584, 'var_prior': 0.5, 'n': 20, 'res_test_ep': 1.4792299153734556}
