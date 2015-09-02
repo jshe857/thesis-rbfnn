@@ -2,7 +2,7 @@ import numpy as np
 
 
 def partition(X,y):
-    np.random.seed(1)
+    np.random.seed(2)
 ###################### Partition the Data appropriately ##########################
     permutation = np.random.choice(range(X.shape[ 0 ]),
     X.shape[ 0 ], replace = False)
