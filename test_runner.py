@@ -5,6 +5,7 @@ import numpy as np
 import EP_run
 import EM_run
 import Data
+from theano import config
 #################### We load artificial data from an RBFNN ########################
 # n_dim = 10
 # n_nodes = 10
@@ -55,15 +56,17 @@ var_prior = 0.76
 # X = csv[ :, range(csv.shape[ 1 ] - 2) ]
 # y = csv[ :, csv.shape[ 1 ] - 1 ]
 
-
+#config.profile=True
 
 dataset = Data.partition(X,y)
-X_train = dataset['X_train']
-y_train = dataset['y_train']
+X_train = np.append(dataset['X_train'],dataset['X_dev'],axis=0)
+y_train = np.append(dataset['y_train'],dataset['y_dev'],axis=0)
 X_test = dataset['X_test']
 y_test = dataset['y_test']
 result = {'ep_train':0,'ep_test':0,
         'em_train':0,'em_test':0,'svr':0}
+
+
 for s in range(9):
 # Find Optimal Hyperparameter Setting
     np.random.seed(s)

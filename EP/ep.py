@@ -11,6 +11,7 @@ import theano.tensor as T
 from theano import pp
 import network
 
+from theano import config
 import prior
 
 class EP:
@@ -42,7 +43,7 @@ class EP:
         # We create a theano function for updating the posterior
         self.adf_update = theano.function([ self.x, self.y ], self.logZ,
             updates = self.network.generate_updates(self.logZ, self.logZ1,
-            self.logZ2))
+            self.logZ2),name="EP")
 
         # We greate a theano function for the network predictive distribution
 
@@ -84,7 +85,6 @@ class EP:
 
                 #sys.stdout.write('{}'.format(i + 1))
                 #sys.stdout.flush()
-
     def get_deterministic_output(self, X_test):
 
         output = np.zeros(X_test.shape[ 0 ])
