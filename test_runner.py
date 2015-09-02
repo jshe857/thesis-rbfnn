@@ -24,19 +24,19 @@ import Data
 # a = 0.1
 # n_hidden_units = 50
 #################### We load the boston housing dataset ###########################
-data = np.loadtxt('boston_housing.txt')
-X = data[ :, range(data.shape[ 1 ] - 1) ]
-y = data[ :, data.shape[ 1 ] - 1 ]
-n = 50
+# data = np.loadtxt('boston_housing.txt')
+# X = data[ :, range(data.shape[ 1 ] - 1) ]
+# y = data[ :, data.shape[ 1 ] - 1 ]
+# n = 50
 a = 0
 eta = 0.0212
 lam_em = 0.01
 lam = 0.05
 var_prior = 0.76
 #################### We load concrete dataset ######################################
-#csv = np.genfromtxt ('concrete.csv', delimiter=",",skip_header=1)
-#X = csv[ :, range(csv.shape[ 1 ] - 3) ]
-#y = csv[ :, csv.shape[ 1 ] - 1 ]
+csv = np.genfromtxt ('concrete.csv', delimiter=",",skip_header=1)
+X = csv[ :, range(csv.shape[ 1 ] - 3) ]
+y = csv[ :, csv.shape[ 1 ] - 1 ]
 
 ##################### We load forestfires dataset #################################
 #csv = np.genfromtxt ('forestfires.csv', delimiter=",",skip_header=1)
@@ -57,20 +57,27 @@ var_prior = 0.76
 
 
 
+for n in [30,50,60,75,100,125,150,175]:
+    dataset = Data.partition(X,y)
+    X_train = dataset['X_train']
+    y_train = dataset['y_train']
+    X_test = dataset['X_test']
+    y_test = dataset['y_test']
+    result = {'ep_train':0,'ep_test':0,
+              'em_train':0,'em_test':0}
+    for s in range(4):
+    # Find Optimal Hyperparameter Setting
+        np.random.seed(s)
 
-dataset = Data.partition(X,y)
-X_train = dataset['X_train']
-y_train = dataset['y_train']
-X_test = dataset['X_test']
-y_test = dataset['y_test']
-# Find Optimal Hyperparameter Setting
-print '==========================EP========================'
-print EP_run.ep_run(X_train,y_train,X_test,y_test,n,lam=lam,var_prior=var_prior) 
-print '==========================EM========================'
-
-print EM_run.em_run(X_train,y_train,X_test,y_test,n,lam=lam_em,eta=eta,a=a) 
+        r = EP_run.ep_run(X_train,y_train,X_test,y_test,n,lam=lam,var_prior=var_prior) 
+        result['ep_train'] += r['train']*0.25
+        result['ep_test'] += r['test']*0.25
+        r = EM_run.em_run(X_train,y_train,X_test,y_test,n,lam=lam_em,eta=eta,a=a) 
+        result['em_train'] += r['train']*0.25
+        result['em_test'] += r['test']*0.25
 # Development Set
-
+    print 'for size '+str(n)+':'
+    print result
 
 # Perform K-fold cross validation
 
