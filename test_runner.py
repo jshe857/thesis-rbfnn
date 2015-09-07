@@ -4,6 +4,10 @@ import time
 import numpy as np
 import EP_run
 import EM_run
+import sys
+sys.path.append('MC')
+import MC_net
+
 import Data
 from theano import config
 #################### We load artificial data from an RBFNN ########################
@@ -25,15 +29,15 @@ from theano import config
 # a = 0.1
 # n_hidden_units = 50
 #################### We load the boston housing dataset ###########################
-data = np.loadtxt('boston_housing.txt')
-X = data[ :, range(data.shape[ 1 ] - 1) ]
-y = data[ :, data.shape[ 1 ] - 1 ]
-n = 50
-a = 0
-eta = 0.0212
-lam_em = 0.01
-lam = 0.05
-var_prior = 0.76
+#data = np.loadtxt('boston_housing.txt')
+#X = data[ :, range(data.shape[ 1 ] - 1) ]
+#y = data[ :, data.shape[ 1 ] - 1 ]
+#n = 50
+#a = 0
+#eta = 0.0212
+#lam_em = 0.01
+#lam = 0.05
+#var_prior = 0.76
 #################### We load concrete dataset ######################################
 #csv = np.genfromtxt ('concrete.csv', delimiter=",",skip_header=1)
 #X = csv[ :, range(csv.shape[ 1 ] - 3) ]
@@ -58,6 +62,14 @@ var_prior = 0.76
 
 #config.profile=True
 
+################### We load power dataset ######################################
+csv = np.genfromtxt ('power.csv', delimiter=",",skip_header=1)
+X = csv[ 1:100, range(csv.shape[ 1 ] - 1) ]
+y = csv[ 1:100, csv.shape[ 1 ] - 1 ]
+
+
+
+
 dataset = Data.partition(X,y)
 X_train = np.append(dataset['X_train'],dataset['X_dev'],axis=0)
 y_train = np.append(dataset['y_train'],dataset['y_dev'],axis=0)
@@ -66,25 +78,25 @@ y_test = dataset['y_test']
 result = {'ep_train':0,'ep_test':0,
         'em_train':0,'em_test':0,'svr':0}
 
-
-for s in range(9):
-# Find Optimal Hyperparameter Setting
-    np.random.seed(s)
-    r = EP_run.ep_run(X_train,y_train,X_test,y_test,n,lam=lam,var_prior=var_prior) 
-    result['ep_train'] += r['train']
-    result['ep_test'] += r['test']
-    r = EM_run.em_run(X_train,y_train,X_test,y_test,n,lam=lam_em,eta=eta,a=a) 
-    result['em_train'] += r['train']
-    result['em_test'] += r['test']
-    result['svr'] += r['svr']
-result['ep_train'] /= 9
-result['em_train'] /= 9
-result['ep_test'] /= 9
-result['em_test'] /= 9
-result['svr'] /= 9
-# Development Set
-print 'for size '+str(n)+':'
-print result
+MC_net.MC_net(X_train,y_train,3)
+#for s in range(9):
+## Find Optimal Hyperparameter Setting
+    #np.random.seed(s)
+    #r = EP_run.ep_run(X_train,y_train,X_test,y_test,n,lam=lam,var_prior=var_prior) 
+    #result['ep_train'] += r['train']
+    #result['ep_test'] += r['test']
+    #r = EM_run.em_run(X_train,y_train,X_test,y_test,n,lam=lam_em,eta=eta,a=a) 
+    #result['em_train'] += r['train']
+    #result['em_test'] += r['test']
+    #result['svr'] += r['svr']
+#result['ep_train'] /= 9
+#result['em_train'] /= 9
+#result['ep_test'] /= 9
+#result['em_test'] /= 9
+#result['svr'] /= 9
+## Development Set
+#print 'for size '+str(n)+':'
+#print result
 
 # Perform K-fold cross validation
 
