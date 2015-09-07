@@ -11,7 +11,7 @@ import matplotlib.patches as mpatches
 np.random.seed(1)
 # We create the train and test sets with 90% and 10% of the data
 #Generate artificial data
-num_train = 50
+num_train = 100
 num_test = 25
 def generate_xy(rng,num,noise=True):
     x_pts =  np.linspace(-rng,rng,num=num)
@@ -26,6 +26,17 @@ X,y = generate_xy(rng,num_train)
 x_true,y_true = generate_xy(rng,200,noise=False)
 print X.shape
 print y.shape
+
+################### We load concrete dataset ######################################
+#csv = np.genfromtxt ('concrete.csv', delimiter=",",skip_header=1)
+#X = csv[ :, range(csv.shape[ 1 ] - 3) ]
+#y = csv[ :, csv.shape[ 1 ] - 1 ]
+
+################### We load power dataset ######################################
+#csv = np.genfromtxt ('power.csv', delimiter=",",skip_header=1)
+#X = csv[ 1:100, range(csv.shape[ 1 ] - 1) ]
+#y = csv[ 1:100, csv.shape[ 1 ] - 1 ]
+
 permutation = np.random.choice(range(X.shape[ 0 ]),
     X.shape[ 0 ], replace = False)
 size_train = num_train
@@ -36,5 +47,5 @@ X_train = X[ index_train, : ]
 y_train = y[ index_train ]
 X_test,y_test = generate_xy(rng,num_test)
 
-MC_net.MC_net(X_train,y_train,3,lam=1)
+MC_net.MC_net(X_train,y_train,10,lam=10)
 
