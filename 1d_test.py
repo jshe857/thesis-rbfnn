@@ -11,7 +11,7 @@ import matplotlib.patches as mpatches
 np.random.seed(1)
 # We create the train and test sets with 90% and 10% of the data
 #Generate artificial data
-num_train = 100
+num_train = 50
 num_test = 25
 def generate_xy(rng,num,noise=True):
     x_pts =  np.linspace(-rng,rng,num=num)
@@ -36,5 +36,5 @@ X_train = X[ index_train, : ]
 y_train = y[ index_train ]
 X_test,y_test = generate_xy(rng,num_test)
 
-MC_net.MC_net(X_train,y_train,10,lam=12)
+MC_net.MC_net(X_train,y_train,3,lam=1)
 

@@ -14,15 +14,15 @@ class MC_net:
         print X_train.shape
         with pm.Model() as rbfnn:
             C = pm.Normal('C',shape=(n_hidden,n_dim))
-            #component, updates = theano.scan(fn=lambda x: T.sum(C-x)**2,sequences=[X_train])
-            rbf = []
-            for x in X_train:
-                rbf.append()
-
+            beta = pm.Gamma('beta',10,10)
             w = pm.Normal('w',shape=(1,n_hidden))
             
-            beta = pm.Gamma('beta',10,10)
-            y = pm.Normal('y',T.sum(w*rbf),beta,observed=y_train)
+            #component, updates = theano.scan(fn=lambda x: T.sum(C-x)**2,sequences=[X_train])
+            y_out=[]
+            for x in X_train:
+               y_out.append(T.sum(w*T.exp(-T.sum(C-x)**2)))
+            
+            y = pm.Normal('y',y_out,beta,observed=y_train)
             start = pm.find_MAP()
             print start
 
