@@ -1,4 +1,6 @@
 import pymc3 as pm
+import matplotlib.pyplot as plt
+import seaborn
 from pymc3 import traceplot
 from pymc3 import summary
 import numpy as np
@@ -17,32 +19,34 @@ class MC_net:
         n_dim = X_train.shape[1]
         print X_train.shape
         with pm.Model() as rbfnn:
-            C = pm.Normal('C',mu=0,sd=10,shape=(n_hidden,n_dim))
-            beta = pm.Gamma('beta',1,1)
-            w = pm.Normal('w',mu=0,sd=10,shape=(1,n_hidden))
+            C = pm.Normal('C',mu=0,sd=10,shape=(n_hidden))
+            #beta = pm.Gamma('beta',1,1)
+            w = pm.Normal('w',mu=0,sd=10,shape=(n_hidden+1))
             
             #component, updates = theano.scan(fn=lambda x: T.sum(C-x)**2,sequences=[X_train])
             y_out=[]
             for x in X_train:
                 #rbf_out =  T.exp(-lam*T.sum((C-x)**2,axis=1)) 
                 #1d speed up
-                rbf_out =  T.exp(-lam*(C-x)**2) 
-                y_out.append(T.dot(w,rbf_out))
+                rbf_out =  T.exp(-lam*(C-x)**2)
+                #rbf_out = theano.printing.Print(rbf_out)                 
+                rbf_out_biased = \
+                        T.concatenate([ rbf_out, T.allocr(1,1) ], 0)
+                y_out.append(T.dot(w,rbf_out_biased))
             
-            y = pm.Normal('y',y_out,beta,observed=y_train)
+            y = pm.Normal('y',mu=y_out,sd=0.01,observed=y_train)
             
             start = pm.find_MAP(fmin=scipy.optimize.fmin_l_bfgs_b)
             print start
             step = pm.NUTS(scaling=start)
-            trace = pm.sample(2000, step, progressbar=False)
+            trace = pm.sample(1000, step, progressbar=False)
             step = pm.NUTS(scaling=trace[-1])
-            trace = pm.sample(40000,step,start=trace[-1])
-            traceplot(trace)        
+            trace = pm.sample(10000,step,start=trace[-1])
+            traceplot(trace)
+            plt.tight_layout();
+            plt.show()
+            #with open("tracedata.txt","wb") as output:
+                #pickle.dump(trace,output,pickle.HIGHEST_PROTOCOL)
 
-            with open("tracedata.txt","wb") as output:
-                pickle.dump(trace,output,pickle.HIGHEST_PROTOCOL)
+            print summary(trace, vars=['C', 'w'])
 
-            print summary(trace, vars=['C', 'w','beta'])
-            mcmc = open("mcmc.txt","w")
-            mcmc.write(summary(trace, vars=['C', 'w','beta']))
-            mcmc.close()
