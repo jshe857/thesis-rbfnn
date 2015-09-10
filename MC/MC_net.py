@@ -31,7 +31,7 @@ class MC_net:
                 rbf_out =  T.exp(-lam*(C-x)**2)
                 #rbf_out = theano.printing.Print(rbf_out)                 
                 rbf_out_biased = \
-                        T.concatenate([ rbf_out, T.allocr(1,1) ], 0)
+                        T.concatenate([ rbf_out, T.alloc(1,1) ], 0)
                 y_out.append(T.dot(w,rbf_out_biased))
             
             y = pm.Normal('y',mu=y_out,sd=0.01,observed=y_train)
@@ -39,14 +39,20 @@ class MC_net:
             start = pm.find_MAP(fmin=scipy.optimize.fmin_l_bfgs_b)
             print start
             step = pm.NUTS(scaling=start)
-            trace = pm.sample(1000, step, progressbar=False)
+            trace = pm.sample(2000, step, progressbar=False)
             step = pm.NUTS(scaling=trace[-1])
-            trace = pm.sample(10000,step,start=trace[-1])
-            traceplot(trace)
-            plt.tight_layout();
-            plt.show()
-            #with open("tracedata.txt","wb") as output:
-                #pickle.dump(trace,output,pickle.HIGHEST_PROTOCOL)
+            trace = pm.sample(20000,step,start=trace[-1])
+            
 
             print summary(trace, vars=['C', 'w'])
 
+            vars = trace.varnames   
+            for i, v in enumerate(vars):
+                for d in trace.get_values(v, combine=False, squeeze=False):
+                    d=np.squeeze(d)
+                    with open(str(v)+".txt","w+") as thefile:
+                        for item in d:
+                            print>>thefile, item
+
+            traceplot(trace)
+            plt.show()

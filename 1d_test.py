@@ -23,6 +23,7 @@ def generate_xy(rng,num,noise=True):
         #y = 3*np.cos(x_pts/9) +  2*np.sin(x_pts/15)
         y = 2*np.exp(-10*(x_pts - 0.1)**2)
     return(X,y)
+#rng = 50
 rng = 2
 X,y = generate_xy(rng,num_train)
 x_true,y_true = generate_xy(rng,2,noise=False)
@@ -50,5 +51,6 @@ y_train = y[ index_train ]
 X_test,y_test = generate_xy(rng,num_test)
 plt.plot(X,y)
 plt.show()
-MC_net.MC_net(X_train,y_train,1,lam=10)
 
+#MC_net.MC_net(X_train,y_train,6,lam=10)
+MC_net.MC_net(X_train,y_train,1,lam=10)
