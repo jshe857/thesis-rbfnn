@@ -60,6 +60,10 @@ plt.figure()
 
 csv = np.genfromtxt ('C_1d_1network.txt', delimiter=",",skip_header=0)
 
+#updated v __str__ = [[ 0.00092433  0.00010456]]
+#updated v __str__ = [[  4.16395410e-06]]
+#updated m __str__ = [[ 0.08761059]]
+#updated m __str__ = [[ 4.48781402 -0.68916524]]
 
 weights = np.ones_like(csv)/float(len(csv))
 n, bins, patches = plt.hist(csv,80, normed=True,histtype='stepfilled',weights=weights)
