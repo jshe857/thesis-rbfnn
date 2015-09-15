@@ -85,8 +85,8 @@ class Network:
             upd_m = (self.params_m_w[ i ] + self.params_v_w[ i ]*grad_m)
             upd_v = ( self.params_v_w[ i ] - self.params_v_w[ i ]**2 * (grad_m**2 - 2 * grad_v ))
            
-            # upd_m = theano.printing.Print('updated m')(upd_m )
-            # upd_v = theano.printing.Print('updated v')(upd_v)
+            #upd_m = theano.printing.Print('updated m')(upd_m)
+            #upd_v = theano.printing.Print('updated v')(upd_v)
            
             updates.append((self.params_m_w[ i ], upd_m))
             updates.append((self.params_v_w[ i ], upd_v))
