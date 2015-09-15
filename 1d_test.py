@@ -19,14 +19,14 @@ def generate_xy(rng,num,noise=True):
     x_pts =  np.linspace(-rng,rng,num=num)
     X = np.array([x_pts]).T
     if (noise):
-        y = 3*np.cos(x_pts/9) +  2*np.sin(x_pts/15) + 0.1*np.random.randn(num)
-        #y = 2*np.exp(-10*(x_pts - 0.1)**2) + 0.1*np.random.randn(num) 
+        #y = 3*np.cos(x_pts/9) +  2*np.sin(x_pts/15) + 0.1*np.random.randn(num)
+        y = 2*np.exp(-10*(x_pts - 0.1)**2) + 0.1*np.random.randn(num) 
     else:
-        y = 3*np.cos(x_pts/9) +  2*np.sin(x_pts/15)
-        #y = 2*np.exp(-10*(x_pts - 0.1)**2)
+        #y = 3*np.cos(x_pts/9) +  2*np.sin(x_pts/15)
+        y = 2*np.exp(-10*(x_pts - 0.1)**2)
     return(X,y)
-rng = 50
-#rng = 2
+#rng = 50
+rng = 2
 X,y = generate_xy(rng,num_train)
 x_true,y_true = generate_xy(rng,2,noise=False)
 print X.shape
@@ -51,15 +51,17 @@ index_test = permutation[ size_train : ]
 X_train = X[ index_train, : ]
 y_train = y[ index_train ]
 X_test,y_test = generate_xy(rng,num_test)
-plt.show()
+plt.plot(X_test,y_test)
+#plt.show()
 
 #MC_net.MC_net(X_train,y_train,6,lam=10)
 #MC_net.MC_net(X_train,y_train,1,lam=10)
 
-net = EP_net.EP_net(X_train, y_train,[6],10,1)
+net = EP_net.EP_net(X_train, y_train,[1],10,1)
 net.train(X_train,y_train,40)
-m, v, v_noise = net.predict(X_test)
-
-for (mean,var) in zip(m,v): 
-    print str(mean+2*sqrt(var)) +','+str(mean)+','+str(mean-2*sqrt(var))
+#m, v, v_noise = net.predict(X_test)
+##plt.plot(X_test,m-7*np.sqrt(v),X_test,m+7*np.sqrt(v))
+##plt.show()
+#for (mean,var) in zip(m,v): 
+    #print str(mean+5*np.sqrt(var)) +','+str(mean)+','+str(mean-5*np.sqrt(var))
 
