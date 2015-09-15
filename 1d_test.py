@@ -3,7 +3,9 @@ import math
 import numpy as np
 import sys
 sys.path.append('MC')
+sys.path.append('EP')
 import MC_net
+import EP_net
 # import matplotlib
 # matplotlib.use('pgf')
 import matplotlib.pyplot as plt
@@ -12,19 +14,19 @@ np.random.seed(1)
 # We create the train and test sets with 90% and 10% of the data
 #Generate artificial data
 num_train = 100
-num_test = 25
+num_test = 500
 def generate_xy(rng,num,noise=True):
     x_pts =  np.linspace(-rng,rng,num=num)
     X = np.array([x_pts]).T
     if (noise):
-        #y = 3*np.cos(x_pts/9) +  2*np.sin(x_pts/15) + 0.1*np.random.randn(num)
-        y = 2*np.exp(-10*(x_pts - 0.1)**2) + 0.1*np.random.randn(num) 
+        y = 3*np.cos(x_pts/9) +  2*np.sin(x_pts/15) + 0.1*np.random.randn(num)
+        #y = 2*np.exp(-10*(x_pts - 0.1)**2) + 0.1*np.random.randn(num) 
     else:
-        #y = 3*np.cos(x_pts/9) +  2*np.sin(x_pts/15)
-        y = 2*np.exp(-10*(x_pts - 0.1)**2)
+        y = 3*np.cos(x_pts/9) +  2*np.sin(x_pts/15)
+        #y = 2*np.exp(-10*(x_pts - 0.1)**2)
     return(X,y)
-#rng = 50
-rng = 2
+rng = 50
+#rng = 2
 X,y = generate_xy(rng,num_train)
 x_true,y_true = generate_xy(rng,2,noise=False)
 print X.shape
@@ -49,8 +51,15 @@ index_test = permutation[ size_train : ]
 X_train = X[ index_train, : ]
 y_train = y[ index_train ]
 X_test,y_test = generate_xy(rng,num_test)
-plt.plot(X,y)
 plt.show()
 
 #MC_net.MC_net(X_train,y_train,6,lam=10)
-MC_net.MC_net(X_train,y_train,1,lam=10)
+#MC_net.MC_net(X_train,y_train,1,lam=10)
+
+net = EP_net.EP_net(X_train, y_train,[6],10,1)
+net.train(X_train,y_train,40)
+m, v, v_noise = net.predict(X_test)
+
+for (mean,var) in zip(m,v): 
+    print str(mean+2*sqrt(var)) +','+str(mean)+','+str(mean-2*sqrt(var))
+
