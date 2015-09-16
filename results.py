@@ -66,31 +66,31 @@ def normpdf(m,v,x):
    
    return np.exp(-(x-m)**2/(2*v)) / (np.sqrt(2*np.pi*v))
 
-def plot_posterior(csv,ep_m,ep_v,title):
-    plt.figure()
-    n, bins, patches = plt.hist(csv,80, normed=True,histtype='stepfilled',label="MCMC")
+def plot_posterior(ax,csv,ep_m,ep_v,title):
+    n, bins, patches = ax.hist(csv,80, normed=True,histtype='stepfilled',label="MCMC")
     plt.setp(patches, 'facecolor', 'g', 'alpha', 0.75)
-    print ep_m
     for m,v in zip(ep_m,ep_v):
         x = np.linspace(m-5*np.sqrt(v),m+5*np.sqrt(v),num=200)
-        plt.plot(x,normpdf(m,v,x),'b-',label="EP",alpha=0.75)
-    plt.legend()
-    plt.title(title)
+        ax.plot(x,normpdf(m,v,x),'b-',label="EP",alpha=0.75)
+    ax.legend()
+    ax.set_title(title)
 
 
-csv = np.genfromtxt ('C_1d_1network.txt', delimiter=",",skip_header=0)
-plot_posterior(csv,[0.09054334],[0.00000302139],'C')
-
-
-csv = np.genfromtxt ('w_1d_1network.txt', delimiter=",",skip_header=0)
-plot_posterior(csv,[-0.00947378,2.13541186],[0.00001190881,0.000141674],'w')
+fig,ax = plt.subplots(2,figsize=(7,8))
+plt.suptitle('Posterior Estimate\n Training Set Size: 20')
 
 csv = np.genfromtxt ('C_1d_1network_20.txt', delimiter=",",skip_header=0)
-plot_posterior(csv,[0.09054334],[0.00000302139],'C')
-
-
+plot_posterior(ax[0],csv,[0.09054334],[0.00000302139],'C')
 csv = np.genfromtxt ('w_1d_1network_20.txt', delimiter=",",skip_header=0)
-plot_posterior(csv,[-0.00947378,2.13541186],[0.00001190881,0.000141674],'w')
+plot_posterior(ax[1],csv,[-0.00947378,2.13541186],[0.00001190881,0.000141674],'w')
+
+fig,ax = plt.subplots(2,figsize=(7,8))
+plt.suptitle('Training Set Size:100')
+
+csv = np.genfromtxt ('C_1d_1network.txt', delimiter=",",skip_header=0)
+plot_posterior(ax[0],csv,[0.09054334],[0.00000302139],'C')
+csv = np.genfromtxt ('w_1d_1network.txt', delimiter=",",skip_header=0)
+plot_posterior(ax[1],csv,[-0.00947378,2.13541186],[0.00001190881,0.000141674],'w')
 
 #########################Uncertainty Estimate###############################
 def generate_xy(rng,num,noise=True):
@@ -105,7 +105,7 @@ def generate_xy(rng,num,noise=True):
     return(X,y)
 
 fig,ax = plt.subplots(2, sharex=True,figsize=(7,8))
-plt.suptitle('Variance')
+plt.suptitle('Prediction Variance')
 rng = 50
 x_true,y_true = generate_xy(rng,200,noise=False)
 x_noise,y_noise = generate_xy(rng,100,noise=True)
