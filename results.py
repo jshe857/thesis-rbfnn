@@ -58,10 +58,6 @@ plt.title("Prediction Error vs. Network Size")
 #########################POSTERIOR ESTIMATION###############################
 
 
-# updated m __str__ = [[ 0.09054334]]
-# updated m __str__ = [[ 2.33541186 -0.00947378]]
-# updated v __str__ = [[ 0.141674    0.01190881]]
-# updated v __str__ = [[ 0.00302139]]
 def normpdf(m,v,x):
    
    return np.exp(-(x-m)**2/(2*v)) / (np.sqrt(2*np.pi*v))
@@ -69,10 +65,17 @@ def normpdf(m,v,x):
 def plot_posterior(ax,csv,ep_m,ep_v,title):
     n, bins, patches = ax.hist(csv,80, normed=True,histtype='stepfilled',label="MCMC")
     plt.setp(patches, 'facecolor', 'g', 'alpha', 0.75)
+    i = 0
+    label = "EP"
     for m,v in zip(ep_m,ep_v):
+        if i == 1:
+            label = ""
+
         x = np.linspace(m-5*np.sqrt(v),m+5*np.sqrt(v),num=200)
-        ax.plot(x,normpdf(m,v,x),'b-',label="EP",alpha=0.75)
+        ax.plot(x,normpdf(m,v,x),'b-',label=label,alpha=0.75)
+        i+=1
     ax.legend()
+    ax.set_ylabel('pdf (' + str(title) + ')')
     ax.set_title(title)
 
 
@@ -82,13 +85,13 @@ plt.suptitle('Posterior Estimate\n Training Set Size: 20')
 csv = np.genfromtxt ('C_1d_1network_20.txt', delimiter=",",skip_header=0)
 plot_posterior(ax[0],csv,[0.09054334],[0.00000302139],'C')
 csv = np.genfromtxt ('w_1d_1network_20.txt', delimiter=",",skip_header=0)
-plot_posterior(ax[1],csv,[-0.00947378,2.13541186],[0.00001190881,0.000141674],'w')
+plot_posterior(ax[1],csv,[-0.00947378,2.03541186],[0.0001190881,0.00141674],'w')
 
 fig,ax = plt.subplots(2,figsize=(7,8))
 plt.suptitle('Training Set Size:100')
 
 csv = np.genfromtxt ('C_1d_1network.txt', delimiter=",",skip_header=0)
-plot_posterior(ax[0],csv,[0.09054334],[0.00000302139],'C')
+plot_posterior(ax[0],csv,[0.09054334],[0.000000302139],'C')
 csv = np.genfromtxt ('w_1d_1network.txt', delimiter=",",skip_header=0)
 plot_posterior(ax[1],csv,[-0.00947378,2.13541186],[0.00001190881,0.000141674],'w')
 
@@ -108,7 +111,8 @@ fig,ax = plt.subplots(2, sharex=True,figsize=(7,8))
 plt.suptitle('Prediction Variance')
 rng = 50
 x_true,y_true = generate_xy(rng,200,noise=False)
-x_noise,y_noise = generate_xy(rng,100,noise=True)
+x_100_noise,y_100_noise = generate_xy(rng,100,noise=True)
+x_500_noise,y_500_noise = generate_xy(rng,500,noise=True)
 
 
  
@@ -118,7 +122,7 @@ x_pts =  np.linspace(-50,50,num=500)
 ax[0].fill_between(x_pts,csv[:,0],csv[:,2],alpha=0.2) 
 ax[0].plot(x_pts,csv[:,1],'b-',label='Prediction') 
 ax[0].plot(x_true,y_true,'g-',label='True function')
-ax[0].plot(x_noise,y_noise,'r.',label='Training data')
+ax[0].plot(x_100_noise,y_100_noise,'r.',label='Training data')
 ax[0].legend()
 ax[0].set_title('n = 100')
 ax[0].set_ylabel('y')
@@ -128,7 +132,7 @@ x_pts =  np.linspace(-50,50,num=500)
 ax[1].fill_between(x_pts,csv[:,0],csv[:,2],alpha=0.2) 
 ax[1].plot(x_pts,csv[:,1],'b-',label='Prediction') 
 ax[1].plot(x_true,y_true,'g-',label='True function')
-ax[1].plot(x_noise,y_noise,'r.',label='Training data')
+ax[1].plot(x_500_noise,y_500_noise,'r.',label='Training data')
 ax[1].legend()
 ax[1].set_ylabel('y')
 ax[1].set_xlabel('x')
