@@ -13,7 +13,7 @@ import matplotlib.patches as mpatches
 np.random.seed(1)
 # We create the train and test sets with 90% and 10% of the data
 #Generate artificial data
-num_train = 100
+num_train = 20
 num_test = 500
 def generate_xy(rng,num,noise=True):
     x_pts =  np.linspace(-rng,rng,num=num)
@@ -55,13 +55,13 @@ plt.plot(X_test,y_test)
 #plt.show()
 
 #MC_net.MC_net(X_train,y_train,6,lam=10)
-#MC_net.MC_net(X_train,y_train,1,lam=10)
+MC_net.MC_net(X_train,y_train,1,lam=10)
 
 net = EP_net.EP_net(X_train, y_train,[1],10,1)
 net.train(X_train,y_train,40)
-#m, v, v_noise = net.predict(X_test)
-##plt.plot(X_test,m-7*np.sqrt(v),X_test,m+7*np.sqrt(v))
-##plt.show()
+# m, v, v_noise = net.predict(X_test)
+# plt.plot(X_test,m-7*np.sqrt(v),X_test,m+7*np.sqrt(v))
+# plt.show()
 #for (mean,var) in zip(m,v): 
     #print str(mean+5*np.sqrt(var)) +','+str(mean)+','+str(mean-5*np.sqrt(var))
 
