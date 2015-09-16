@@ -56,29 +56,41 @@ plt.title("Prediction Error vs. Network Size")
 # plt.savefig("boston_overfit.png")
 
 #########################POSTERIOR ESTIMATION###############################
-plt.figure()
+
+
+# updated m __str__ = [[ 0.09054334]]
+# updated m __str__ = [[ 2.33541186 -0.00947378]]
+# updated v __str__ = [[ 0.141674    0.01190881]]
+# updated v __str__ = [[ 0.00302139]]
+def normpdf(m,v,x):
+   
+   return np.exp(-(x-m)**2/(2*v)) / (np.sqrt(2*np.pi*v))
+
+def plot_posterior(csv,ep_m,ep_v,title):
+    plt.figure()
+    n, bins, patches = plt.hist(csv,80, normed=True,histtype='stepfilled',label="MCMC")
+    plt.setp(patches, 'facecolor', 'g', 'alpha', 0.75)
+    print ep_m
+    for m,v in zip(ep_m,ep_v):
+        x = np.linspace(m-5*np.sqrt(v),m+5*np.sqrt(v),num=200)
+        plt.plot(x,normpdf(m,v,x),'b-',label="EP",alpha=0.75)
+    plt.legend()
+    plt.title(title)
+
 
 csv = np.genfromtxt ('C_1d_1network.txt', delimiter=",",skip_header=0)
-
-#updated v __str__ = [[ 0.00092433  0.00010456]]
-#updated v __str__ = [[  4.16395410e-06]]
-#updated m __str__ = [[ 0.08761059]]
-#updated m __str__ = [[ 4.48781402 -0.68916524]]
-
-weights = np.ones_like(csv)/float(len(csv))
-n, bins, patches = plt.hist(csv,80, normed=True,histtype='stepfilled',weights=weights)
-plt.title('C')
+plot_posterior(csv,[0.09054334],[0.00000302139],'C')
 
 
 csv = np.genfromtxt ('w_1d_1network.txt', delimiter=",",skip_header=0)
+plot_posterior(csv,[-0.00947378,2.13541186],[0.00001190881,0.000141674],'w')
 
-plt.figure()
-n, bins, patches = plt.hist(csv,100,range=(2,2.06), normed=True,histtype='stepfilled')
-plt.title('w_{rbf}')
+csv = np.genfromtxt ('C_1d_1network_20.txt', delimiter=",",skip_header=0)
+plot_posterior(csv,[0.09054334],[0.00000302139],'C')
 
-plt.figure()
-n, bins, patches = plt.hist(csv,100,range=(-0.004,0.008), normed=True,histtype='stepfilled')
-plt.title('w_{bias}')
+
+csv = np.genfromtxt ('w_1d_1network_20.txt', delimiter=",",skip_header=0)
+plot_posterior(csv,[-0.00947378,2.13541186],[0.00001190881,0.000141674],'w')
 
 #########################Uncertainty Estimate###############################
 def generate_xy(rng,num,noise=True):
