@@ -55,7 +55,7 @@ plt.plot(X_test,y_test)
 #plt.show()
 
 #MC_net.MC_net(X_train,y_train,6,lam=10)
-MC_net.MC_net(X_train,y_train,1,lam=10)
+# MC_net.MC_net(X_train,y_train,1,lam=10)
 
 net = EP_net.EP_net(X_train, y_train,[1],10,1)
 net.train(X_train,y_train,40)
