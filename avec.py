@@ -38,24 +38,31 @@ def read_avec(search_pattern):
 
 
 (X_dev,y_dev1,y_dev2) = read_avec('dev_*')
-(X,y_1,y_2) = read_avec('train_*')
+(X_train,y_train1,y_train2) = read_avec('train_*')
 
-permutation = np.random.choice(range(X.shape[ 0 ]),
-    X.shape[ 0 ], replace = False)
 
-size_train = np.round(X.shape[ 0 ] * 0.8)
-index_train = permutation[ 0 : size_train ]
-index_test = permutation[ size_train : ]
-X_train = X[index_train] 
-y_train1 = y_1[index_train]
-y_train2 = y_2[index_train]
 
-X_test = X[index_test] 
-y_test1 = y_1[index_test]
-y_test2 = y_2[index_test]
+X = np.vstack((X_dev,X_train))
+y_1 = np.hstack((y_dev1,y_train1))
+y_2 = np.hstack((y_dev2,y_train2))
 
-hyperparameter.hyper_search(X_train,y_train1,X_dev=X_dev,y_dev=y_dev1)
-hyperparameter.hyper_search(X_train,y_train2,X_dev=X_dev,y_dev=y_dev2)
+# permutation = np.random.choice(range(X.shape[ 0 ]),
+    # X.shape[ 0 ], replace = False)
+
+
+print X.shape
+print y_1.shape
+print y_2.shape
+# X_train = X[index_train] 
+# y_train1 = y_1[index_train]
+# y_train2 = y_2[index_train]
+
+# X_test = X[index_test] 
+# y_test1 = y_1[index_test]
+# y_test2 = y_2[index_test]
+
+hyperparameter.hyper_search(X,y_1)
+hyperparameter.hyper_search(X,y_2)
 
 ################### Construct RBFNN #################################################
 # lam = 0.08

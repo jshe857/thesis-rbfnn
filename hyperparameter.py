@@ -16,8 +16,6 @@ def hyper_search(X,y,X_dev=None,y_dev=None):
     else:
 	    X_train = X
 	    y_train = y
-    print X_train.shape
-    print X_dev.shape
 
 # Find Optimal Hyperparameter Setting
     lam_arr = [0.01,0.05,0.1,1,10]
@@ -43,6 +41,7 @@ def hyper_search(X,y,X_dev=None,y_dev=None):
                 res = EP_run.ep_run(X_train,y_train,X_dev,y_dev,n,lam=lam,var_prior=var_prior)
                 err = res['test']
                 if err < best_ep:
+                   print 'running....'
                    best_ep = err
                    params['lam'] = lam
                    params['n'] = n
@@ -53,7 +52,7 @@ def hyper_search(X,y,X_dev=None,y_dev=None):
             for eta in eta_arr:
                 for a in a_arr:
                     res = EM_run.em_run(X_train,y_train,X_dev,y_dev,n,
-                            lam=lam,eta=eta,a=a)
+                           lam=lam,eta=eta,a=a)
                     err = res['test'] 
                     if err < best_em:
                        best_em = err
