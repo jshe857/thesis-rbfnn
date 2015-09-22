@@ -6,12 +6,18 @@ import EP_run
 import EM_run
 import Data
 
-def hyper_search(X,y):
-    dataset = Data.partition(X,y)
-    X_train = dataset['X_train']
-    y_train = dataset['y_train']
-    X_dev = dataset['X_dev']
-    y_dev = dataset['y_dev']
+def hyper_search(X,y,X_dev=None,y_dev=None):
+    if X_dev==None:
+	    dataset = Data.partition(X,y)
+	    X_train = dataset['X_train']
+	    y_train = dataset['y_train']
+	    X_dev = dataset['X_dev']
+	    y_dev = dataset['y_dev']
+    else:
+	    X_train = X
+	    y_train = y
+    print X_train.shape
+    print X_dev.shape
 
 # Find Optimal Hyperparameter Setting
     lam_arr = [0.01,0.05,0.1,1,10]
@@ -19,6 +25,14 @@ def hyper_search(X,y):
     eta_arr = [0.01,0.1,0.3,0.5,0.7,0.9,1,1.1]
     n_arr = [10,20,30,50]
     var_prior_arr = [0.1,0.5,0.7,1,1.1,1.5,2]
+    
+    
+    lam_arr = [0.01,0.05,10]
+    a_arr = [0,0.01,0.5,1]
+    eta_arr = [0.01,0.1,0.3,0.5,0.7,0.9,1,1.1]
+    n_arr = [10,30,50]
+    var_prior_arr = [0.1,1,2]
+   
     best_ep = 1e6
     best_em = 1e6
     params = {}
@@ -81,49 +95,49 @@ def hyper_search(X,y):
 #y = data[ :, data.shape[ 1 ] - 1 ]
 #print 'Boston Housing Optimal HyperParameter'
 #################### We load concrete dataset ######################################
-csv = np.genfromtxt ('concrete.csv', delimiter=",",skip_header=1)
-X = csv[ :, range(csv.shape[ 1 ] - 3) ]
-y = csv[ :, csv.shape[ 1 ] - 1 ]
-print 'Concrete Optimal HyperParameter'
-hyper_search(X,y)
-y = csv[ :, csv.shape[ 1 ] - 2]
-hyper_search(X,y)
-##################### We load forestfires dataset #################################
-csv = np.genfromtxt ('forestfires.csv', delimiter=",",skip_header=1)
+# csv = np.genfromtxt ('concrete.csv', delimiter=",",skip_header=1)
+# X = csv[ :, range(csv.shape[ 1 ] - 3) ]
+# y = csv[ :, csv.shape[ 1 ] - 1 ]
+# print 'Concrete Optimal HyperParameter'
+# hyper_search(X,y)
+# y = csv[ :, csv.shape[ 1 ] - 2]
+# hyper_search(X,y)
+# ##################### We load forestfires dataset #################################
+# csv = np.genfromtxt ('forestfires.csv', delimiter=",",skip_header=1)
 
-ind = range(csv.shape[ 1 ] - 1)
-ind = [x for x in ind if (x != 2 and x != 3)]
-X = csv[ :,ind]
-y = csv[ :, csv.shape[ 1 ] - 1 ]
+# ind = range(csv.shape[ 1 ] - 1)
+# ind = [x for x in ind if (x != 2 and x != 3)]
+# X = csv[ :,ind]
+# y = csv[ :, csv.shape[ 1 ] - 1 ]
 
-for i in range(len(y)):
-    if y[i] > 0:
-        y[i] = np.log(y[i])
-print 'Forestfires Optimal HyperParameter'
-hyper_search(X,y)
+# for i in range(len(y)):
+    # if y[i] > 0:
+        # y[i] = np.log(y[i])
+# print 'Forestfires Optimal HyperParameter'
+# hyper_search(X,y)
 
 ################ Artificial 1D dataset ##########################################
-num_train = 1000
-def generate_xy(rng,num,noise=True):
-    x_pts =  np.linspace(-rng,rng,num=num)
-    X = np.array([x_pts]).T
-    if (noise):
-        y = 3*np.cos(x_pts/9) +  2*np.sin(x_pts/15) + 0.1*np.random.randn(num)
-    else:
-        y = 3*np.cos(x_pts/9) +  2*np.sin(x_pts/15)
-    return(X,y)
-rng = 80
-X,y = generate_xy(rng,num_train)
-hyper_search(X,y)
+# num_train = 1000
+# def generate_xy(rng,num,noise=True):
+    # x_pts =  np.linspace(-rng,rng,num=num)
+    # X = np.array([x_pts]).T
+    # if (noise):
+        # y = 3*np.cos(x_pts/9) +  2*np.sin(x_pts/15) + 0.1*np.random.randn(num)
+    # else:
+        # y = 3*np.cos(x_pts/9) +  2*np.sin(x_pts/15)
+    # return(X,y)
+# rng = 80
+# X,y = generate_xy(rng,num_train)
+# hyper_search(X,y)
 
 ###################### We load the word music dataset ###############################
-csv = np.genfromtxt ('music.csv', delimiter=",",skip_header=1)
-X = csv[ :, range(csv.shape[ 1 ] - 2) ]
-y = csv[ :, csv.shape[ 1 ] - 1 ]
-print 'World Music  Optimal HyperParameter'
-hyper_search(X,y)
-y = csv[ :, csv.shape[ 1 ] - 2 ]
-hyper_search(X,y)
+# csv = np.genfromtxt ('music.csv', delimiter=",",skip_header=1)
+# X = csv[ :, range(csv.shape[ 1 ] - 2) ]
+# y = csv[ :, csv.shape[ 1 ] - 1 ]
+# print 'World Music  Optimal HyperParameter'
+# hyper_search(X,y)
+# y = csv[ :, csv.shape[ 1 ] - 2 ]
+# hyper_search(X,y)
 
 
 
