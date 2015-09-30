@@ -4,7 +4,7 @@ import numpy as np
 import sys
 sys.path.append('MC')
 sys.path.append('EP')
-import MC_net
+# import MC_net
 import EP_net
 # import matplotlib
 # matplotlib.use('pgf')

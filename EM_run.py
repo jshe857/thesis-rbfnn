@@ -11,9 +11,7 @@ import EM_net
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 
-
-################# EM for RBFNN approach #############################################
-def em_run(X_train,y_train,X_test,y_test,n_hidden_units,lam=0.1,eta=1,a=0.01):
+def em_run(X_train,y_train,X_test,y_test,n_hidden_units,lam=0.1,eta=1,a=0.01,ccc=False):
     em = EM_net.EM_net(X_train,y_train, n_hidden_units,lam,eta,a)
     em.sgd(X_train,y_train,n_epochs=20)
     
@@ -24,31 +22,22 @@ def em_run(X_train,y_train,X_test,y_test,n_hidden_units,lam=0.1,eta=1,a=0.01):
     # plt.show()
 
     # print '====================EM========================'
-    rbf_sgd = em.sgd_predict(X_test)
-    test_res = np.sqrt(np.mean((y_test - rbf_sgd)**2))
+    train_res = em.sgd_predict(X_test)
     # print 'test error'
     # print test_res
 
-    rbf_sgd = em.sgd_predict(X_train)
-    train_res = np.sqrt(np.mean((y_train - rbf_sgd)**2))
+    test_res = em.sgd_predict(X_train)
     # print 'train error'
     # print train_res
 
 
 
 
-    result = svm.SVR().fit(X_train,y_train).predict(X_test) 
-    svr_res = np.sqrt(np.mean((y_test - result)**2))
-
+    # svr_res = svm.SVR().fit(X_train,y_train).predict(X_test) 
     # print '==================SVR========================'
     # print svr_res
 
-    result = linear_model.LinearRegression().fit(X_train,y_train) \
-            .predict(X_test)
-
-    lm_res = np.sqrt(np.mean((y_test - result)**2))
    
-    # print '==================Linear Model========================'
-    # print lm_res
 
-    return {'train':train_res,'test':test_res,'svr':svr_res,'lm':lm_res} 
+    # return {'train':train_res,'test':test_res,'svr':svr_res} 
+    return {'train':train_res,'test':test_res}
