@@ -17,6 +17,9 @@ import arff
 import glob
 np.random.seed(1)
 
+TIME_STEP = 0.04
+VALENCE_SKIP = 2/TIME_STEP
+AROUSAL_SKIP = 4/TIME_STEP
 def read_arff(glob_pattern,skip):
     dataset = [] 
     for files in glob.glob(glob_pattern):
@@ -33,26 +36,26 @@ def read_avec(search_pattern):
     X = read_arff(features+search_pattern,1)
     y_valence = np.squeeze(read_arff(valence+search_pattern,2))
     y_arousal = np.squeeze(read_arff(arousal+search_pattern,2))
+
     return (X,y_valence,y_arousal)
 
 
 
-(X_dev,y_dev1,y_dev2) = read_avec('dev_*')
+# (X_dev,y_dev1,y_dev2) = read_avec('dev_*')
 (X_train,y_train1,y_train2) = read_avec('train_*')
 
 
 
-X = np.vstack((X_dev,X_train))
-y_1 = np.hstack((y_dev1,y_train1))
-y_2 = np.hstack((y_dev2,y_train2))
 
 # permutation = np.random.choice(range(X.shape[ 0 ]),
     # X.shape[ 0 ], replace = False)
 
 
-print X.shape
-print y_1.shape
-print y_2.shape
+
+
+print X_train.shape
+print y_train1.shape
+print y_train2.shape
 # X_train = X[index_train] 
 # y_train1 = y_1[index_train]
 # y_train2 = y_2[index_train]
@@ -61,8 +64,8 @@ print y_2.shape
 # y_test1 = y_1[index_test]
 # y_test2 = y_2[index_test]
 
-hyperparameter.hyper_search(X,y_1)
-hyperparameter.hyper_search(X,y_2)
+hyperparameter.hyper_search(X_train[:-VALENCE_SKIP],y_train1,ccc=True)
+hyperparameter.hyper_search(X_train[:-AROUSAL_SKIP],y_train2,ccc=True)
 
 ################### Construct RBFNN #################################################
 # lam = 0.08
