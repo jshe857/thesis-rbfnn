@@ -1,2 +1,57 @@
 
-{'a': 0, 'lam_em': 0.01, 'eta': 0.01, 'res_test_em': 0.12996183638250622, 'lam': 0.01, 'n_em': 10, 'res_train_ep': 0.11540465035463542, 'res_train_em': 0.12916626808032972, 'var_prior': 1, 'n': 50, 'res_test_ep': 0.1165808481424946}
+
+{'a': 0, 'lam_em': 0.001, 'lam': 0.01, 'eta': 0.001, 'n': 150, 'n_em': 150, 'var_prior': 2}
+
+{'a': 0, 'lam_em': 0.005, 'lam': 0.01, 'eta': 0.001, 'n': 100, 'n_em': 150, 'var_prior': 1}
+
+
+
+(67509, 103)
+(67509,)
+(67509,)
+(40475, 103)
+(13492, 103)
+(13492, 103)
+{'a': 0, 'lam_em': 0.001, 'lam': 0.001, 'eta': 0.1, 'n': 100, 'n_em': 100, 'var_prior': 1}
+best EP error: 0.0141692173783
+best EM error: 0.000353350683469
+{'a': 0, 'lam_em': 0.001, 'lam': 0.001, 'eta': 0.001, 'n': 100, 'n_em': 150, 'var_prior': 1}
+best EP error: 0.0141692173783
+best EM error: 0.00569322661579
+{'a': 0, 'lam_em': 0.001, 'lam': 0.005, 'eta': 0.001, 'n': 100, 'n_em': 150, 'var_prior': 2}
+best EP error: 0.285030789633
+best EM error: 0.00569322661579
+{'a': 0, 'lam_em': 0.001, 'lam': 0.005, 'eta': 0.001, 'n': 150, 'n_em': 150, 'var_prior': 2}
+best EP error: 0.292965655209
+best EM error: 0.00569322661579
+{'a': 0, 'lam_em': 0.001, 'lam': 0.01, 'eta': 0.001, 'n': 100, 'n_em': 150, 'var_prior': 1}
+best EP error: 0.358358088587
+best EM error: 0.00569322661579
+{'a': 0, 'lam_em': 0.001, 'lam': 0.01, 'eta': 0.001, 'n': 150, 'n_em': 150, 'var_prior': 2}
+best EP error: 0.363497667001
+best EM error: 0.00569322661579
+best params
+{'a': 0, 'lam_em': 0.001, 'lam': 0.01, 'eta': 0.001, 'n': 150, 'n_em': 150, 'var_prior': 2}
+(40445, 103)
+(13482, 103)
+(13482, 103)
+{'a': 0, 'lam_em': 0.001, 'lam': 0.001, 'eta': 0.1, 'n': 100, 'n_em': 100, 'var_prior': 1}
+best EP error: 0.10648882008
+best EM error: 0.00282926943797
+{'a': 0, 'lam_em': 0.001, 'lam': 0.001, 'eta': 0.1, 'n': 100, 'n_em': 100, 'var_prior': 1}
+best EP error: 0.10648882008
+best EM error: 0.00282926943797
+{'a': 0, 'lam_em': 0.001, 'lam': 0.005, 'eta': 0.1, 'n': 100, 'n_em': 100, 'var_prior': 2}
+best EP error: 0.351223193733
+best EM error: 0.00282926943797
+{'a': 0, 'lam_em': 0.005, 'lam': 0.005, 'eta': 0.001, 'n': 150, 'n_em': 150, 'var_prior': 2}
+best EP error: 0.35664145772
+best EM error: 0.0038258230639
+{'a': 0, 'lam_em': 0.005, 'lam': 0.01, 'eta': 0.001, 'n': 100, 'n_em': 150, 'var_prior': 1}
+best EP error: 0.422313998967
+best EM error: 0.0038258230639
+{'a': 0, 'lam_em': 0.005, 'lam': 0.01, 'eta': 0.001, 'n': 100, 'n_em': 150, 'var_prior': 1}
+best EP error: 0.422313998967
+best EM error: 0.0038258230639
+best params
+{'a': 0, 'lam_em': 0.005, 'lam': 0.01, 'eta': 0.001, 'n': 100, 'n_em': 150, 'var_prior': 1}
