@@ -125,7 +125,6 @@ net.train(X_train,y_train,40)
 # X_test = X_test[0:10]
 m, v, v_noise = net.predict(X_test)
 print
-print v_noise
 rmse = np.sqrt(np.mean((y_test - m)**2))
 plt.errorbar(range(len(m)),m,fmt='bx',yerr=2*np.sqrt(v))
 plt.plot(range(len(m)),y_test,'ro')
