@@ -52,10 +52,10 @@ def hyper_search(X,y,X_dev=None,y_dev=None,ccc=False):
     var_prior_arr = [0.1,0.5,0.7,1,1.1,1.5,2]
     
     
-    lam_arr = [0.009,0.01,0.02]
+    lam_arr = [0.02,0.03,0.04]
     a_arr = [0,0.01]
-    eta_arr = [0.0001,0.001]
-    n_arr = [50,150]
+    eta_arr = [0.0001]
+    n_arr = [50,100,150]
     var_prior_arr = [0.1,3]
    
     best_ep = -1e6

@@ -1,11 +1,3 @@
-
-
-{'a': 0, 'lam_em': 0.001, 'lam': 0.01, 'eta': 0.001, 'n': 150, 'n_em': 150, 'var_prior': 2}
-
-{'a': 0, 'lam_em': 0.005, 'lam': 0.01, 'eta': 0.001, 'n': 100, 'n_em': 150, 'var_prior': 1}
-
-
-
 (67509, 103)
 (67509,)
 (67509,)
@@ -55,3 +47,56 @@ best EP error: 0.422313998967
 best EM error: 0.0038258230639
 best params
 {'a': 0, 'lam_em': 0.005, 'lam': 0.01, 'eta': 0.001, 'n': 100, 'n_em': 150, 'var_prior': 1}
+
+
+
+
+(67509, 103)
+(67509,)
+(67509,)
+(40475, 103)
+(13492, 103)
+(13492, 103)
+{'a': 0, 'lam_em': 0.009, 'lam': 0.009, 'eta': 0.0001, 'n': 50, 'n_em': 50, 'var_prior': 3}
+best EP error: 0.330586588843
+best EM error: 0.00700156875469
+{'a': 0, 'lam_em': 0.009, 'lam': 0.009, 'eta': 0.0001, 'n': 150, 'n_em': 50, 'var_prior': 0.1}
+best EP error: 0.353211439212
+best EM error: 0.00700156875469
+{'a': 0, 'lam_em': 0.009, 'lam': 0.009, 'eta': 0.0001, 'n': 150, 'n_em': 50, 'var_prior': 0.1}
+best EP error: 0.353211439212
+best EM error: 0.00700156875469
+{'a': 0, 'lam_em': 0.009, 'lam': 0.01, 'eta': 0.0001, 'n': 150, 'n_em': 50, 'var_prior': 0.1}
+best EP error: 0.364234143885
+best EM error: 0.00700156875469
+{'a': 0, 'lam_em': 0.009, 'lam': 0.01, 'eta': 0.0001, 'n': 150, 'n_em': 50, 'var_prior': 0.1}
+best EP error: 0.364234143885
+best EM error: 0.00700156875469
+{'a': 0, 'lam_em': 0.009, 'lam': 0.02, 'eta': 0.0001, 'n': 150, 'n_em': 50, 'var_prior': 0.1}
+best EP error: 0.407342506913
+best EM error: 0.00700156875469
+best params
+{'a': 0, 'lam_em': 0.009, 'lam': 0.02, 'eta': 0.0001, 'n': 150, 'n_em': 50, 'var_prior': 0.1}
+(40445, 103)
+(13482, 103)
+(13482, 103)
+{'a': 0.01, 'lam_em': 0.009, 'lam': 0.009, 'eta': 0.001, 'n': 50, 'n_em': 50, 'var_prior': 3}
+best EP error: 0.390966948945
+best EM error: 1.25712230658e-14
+{'a': 0, 'lam_em': 0.009, 'lam': 0.009, 'eta': 0.0001, 'n': 150, 'n_em': 150, 'var_prior': 3}
+best EP error: 0.418121761277
+best EM error: 0.0098846388961
+{'a': 0, 'lam_em': 0.009, 'lam': 0.009, 'eta': 0.0001, 'n': 150, 'n_em': 150, 'var_prior': 3}
+best EP error: 0.418121761277
+best EM error: 0.0098846388961
+{'a': 0, 'lam_em': 0.009, 'lam': 0.01, 'eta': 0.0001, 'n': 150, 'n_em': 150, 'var_prior': 0.1}
+best EP error: 0.426381686803
+best EM error: 0.0098846388961
+{'a': 0, 'lam_em': 0.009, 'lam': 0.02, 'eta': 0.0001, 'n': 50, 'n_em': 150, 'var_prior': 3}
+best EP error: 0.444351674287
+best EM error: 0.0098846388961
+{'a': 0, 'lam_em': 0.009, 'lam': 0.02, 'eta': 0.0001, 'n': 50, 'n_em': 150, 'var_prior': 3}
+best EP error: 0.444351674287
+best EM error: 0.0098846388961
+best params
+{'a': 0, 'lam_em': 0.009, 'lam': 0.02, 'eta': 0.0001, 'n': 50, 'n_em': 150, 'var_prior': 3}
