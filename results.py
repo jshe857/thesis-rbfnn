@@ -1,6 +1,7 @@
 #!/usr/bin/python2
 import matplotlib.pyplot as plt
 import seaborn as sns
+import avec
 import numpy as np
 plt.rc('text',usetex=True)
 plt.rc('font', family='serif') #Boston Housing Overfit
@@ -137,4 +138,16 @@ ax[1].legend()
 ax[1].set_ylabel('y')
 ax[1].set_xlabel('x')
 ax[1].set_title('n = 500')
+
+
+#========================= AVEC RESULTS ==============================
+TIME_IDX = 0
+(X_dev1,X_dev2,y_dev1,y_dev2) = avec.read_avec('dev_*')
+# (X_train1,X_train2,y_train1,y_train2) = avec.read_avec('train_*')
+csv = np.genfromtxt('arousal.txt',delimiter=",",skip_header=0)
+csv = np.genfromtxt('valence.txt',delimiter=",",skip_header=0)
+
+plt.plot(X_dev1[:,TIME_IDX],y_dev1)
+plt.plot(X_dev2[:,TIME_IDX],y_dev2)
+
 plt.show()
