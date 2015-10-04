@@ -81,49 +81,49 @@ def compute_ccc(y,result):
 ################### Construct RBFNN #################################################
 #VALENCE
 
-lam = 0.02
-var_prior = 0.1 
-n_hidden_units = 150
-print 'lam: ' + str(lam)
-print 'var_prior: ' + str(var_prior)
-print 'n_hidden_units: ' + str(n_hidden_units)
+# lam = 0.02
+# var_prior = 0.1 
+# n_hidden_units = 150
+# print 'lam: ' + str(lam)
+# print 'var_prior: ' + str(var_prior)
+# print 'n_hidden_units: ' + str(n_hidden_units)
 
-net = EP_net.EP_net(X_train1, y_train1,
-    [n_hidden_units ],lam,var_prior)
-net.train(X_train2,y_train1,1)
+# net = EP_net.EP_net(X_train1, y_train1,
+    # [n_hidden_units ],lam,var_prior)
+# net.train(X_train2,y_train1,1)
 
-#AROUSAL
-lam = 0.02
-var_prior = 3 
-n_hidden_units = 100
-# n_hidden_units = 50
-print 'lam: ' + str(lam)
-print 'var_prior: ' + str(var_prior)
-print 'n_hidden_units: ' + str(n_hidden_units)
+# #AROUSAL
+# lam = 0.02
+# var_prior = 3 
+# n_hidden_units = 100
+# # n_hidden_units = 50
+# print 'lam: ' + str(lam)
+# print 'var_prior: ' + str(var_prior)
+# print 'n_hidden_units: ' + str(n_hidden_units)
 
-net = EP_net.EP_net(X_train2, y_train2,
-    [n_hidden_units ],lam,var_prior)
-net.train(X_train2,y_train2,1)
-# ######################### EP for RBFNN approach #############################################
+# net = EP_net.EP_net(X_train2, y_train2,
+    # [n_hidden_units ],lam,var_prior)
+# net.train(X_train2,y_train2,1)
+# # ######################### EP for RBFNN approach #############################################
 
 
 
-m, v, v_noise = net.predict(X_dev1)
-print "VALENCE" 
-for (mean,var) in zip(m,v):
-    print [mean,var]
-ccc = compute_ccc(y_dev1,m)
-print '====================EP========================'
-print 'Valence CCC:'
-print ccc 
+# m, v, v_noise = net.predict(X_dev1)
+# print "VALENCE" 
+# for (mean,var) in zip(m,v):
+    # print [mean,var]
+# ccc = compute_ccc(y_dev1,m)
+# print '====================EP========================'
+# print 'Valence CCC:'
+# print ccc 
 
-m, v, v_noise = net.predict(X_dev2)
-print "AROUSAL" 
-for (mean,var) in zip(m,v):
-    print [mean,var]
-ccc = compute_ccc(y_dev2,m)
-print 'Arousal CCC:'
-print ccc
+# m, v, v_noise = net.predict(X_dev2)
+# print "AROUSAL" 
+# for (mean,var) in zip(m,v):
+    # print [mean,var]
+# ccc = compute_ccc(y_dev2,m)
+# print 'Arousal CCC:'
+# print ccc
 
 # ######################### EM for RBFNN approach #############################################
 # em = EM_net.EM_net(X_train,y_train, n_hidden_units,lam)
