@@ -16,7 +16,7 @@ import prior
 
 class EP:
 
-    def __init__(self, layer_sizes, mean_y_train, std_y_train,lam,var_targets=1):
+    def __init__(self, layer_sizes, mean_y_train, std_y_train,lam,var_targets,debug):
         if config.compute_test_value == 'raise':
             config.compute_test_value = 'ignore'
         self.std_y_train = std_y_train
@@ -30,7 +30,7 @@ class EP:
 
         params = self.prior.get_initial_params()
         self.network = network.Network(params[ 'm_w' ], params[ 'v_w' ],
-            params[ 'a' ], params[ 'b' ],lam)
+            params[ 'a' ], params[ 'b' ],lam,debug=debug)
 
         # We create the input and output variables in theano
 

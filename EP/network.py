@@ -9,12 +9,12 @@ import network_layer
 
 class Network:
 
-    def __init__(self, m_w_init, v_w_init, a_init, b_init,lam):
+    def __init__(self, m_w_init, v_w_init, a_init, b_init,lam,debug):
 
         # We create the different layers
 
         self.layers = []
-
+	self.debug=debug
         if len(m_w_init) > 1:
             for m_w, v_w in zip(m_w_init[ : -1 ], v_w_init[ : -1 ]):
                 self.layers.append(network_layer.Network_layer(m_w, v_w, True,lam))
@@ -84,9 +84,9 @@ class Network:
 
             upd_m = (self.params_m_w[ i ] + self.params_v_w[ i ]*grad_m)
             upd_v = ( self.params_v_w[ i ] - self.params_v_w[ i ]**2 * (grad_m**2 - 2 * grad_v ))
-           
-            # upd_m = theano.printing.Print('updated m')(upd_m)
-            # upd_v = theano.printing.Print('updated v')(upd_v)
+	    if self.debug:           
+		    upd_m = theano.printing.Print('updated m')(upd_m)
+		    upd_v = theano.printing.Print('updated v')(upd_v)
            
             updates.append((self.params_m_w[ i ], upd_m))
             updates.append((self.params_v_w[ i ], upd_v))
