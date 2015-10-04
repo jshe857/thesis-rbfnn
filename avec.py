@@ -18,28 +18,45 @@ import glob
 np.random.seed(1)
 
 TIME_STEP = 0.04
-VALENCE_SKIP = 2/TIME_STEP
-AROUSAL_SKIP = 4/TIME_STEP
-def read_arff(glob_pattern,skip):
-    dataset = [] 
+VALENCE_SKIP = int(2/TIME_STEP)
+AROUSAL_SKIP = int(4/TIME_STEP)
+def read_arff(glob_pattern,time_delay,read_X=False):
+    dataset = []
+    skip_header = 2
+    if read_X:
+            skip_header=1
+
     for files in glob.glob(glob_pattern):
-        data =arff.load(open(files))
-        dataset.append([row[skip:] for row in data['data']])
+        data =arff.load(open(files))['data']
+        # if read_X:
+                # data = data [:-time_delay]
+        # else:
+                # data = data[time_delay:]
+        dataset.append([row[skip_header:] for row in data])
     return np.concatenate(dataset)
 
+# def read_arff(glob_pattern,time_delay,read_X=False):
+    # dataset = []
+    # skip_header = 2
+    # if read_X:
+	    # skip_header=1
+
+    # for files in glob.glob(glob_pattern):
+        # data =arff.load(open(files))['data']
+        # dataset.append([row[skip_header:] for row in data])
+    # if read_X:
+        # return np.concatenate(dataset)[:-time_delay]
+    # return np.concatenate(dataset)[time_delay:]
 ############################# Load and Process AVEC rows #############################
 def read_avec(search_pattern):
     features = 'Data/avec/features_audio/'
     valence = 'Data/avec/ratings_gold_standard/valence/'
     arousal = 'Data/avec/ratings_gold_standard/arousal/'
 
-    X = read_arff(features+search_pattern,1)
-    y_valence = np.squeeze(read_arff(valence+search_pattern,2))
-    y_arousal = np.squeeze(read_arff(arousal+search_pattern,2))
-    X_valence = X[:-VALENCE_SKIP]
-    X_arousal = X[:-AROUSAL_SKIP]
-    y_valence = y_valence[VALENCE_SKIP:]
-    y_arousal = y_arousal[AROUSAL_SKIP:]
+    X_valence = read_arff(features+search_pattern,VALENCE_SKIP,read_X=True)
+    X_arousal = read_arff(features+search_pattern,AROUSAL_SKIP,read_X=True)
+    y_valence = np.squeeze(read_arff(valence+search_pattern,VALENCE_SKIP))
+    y_arousal = np.squeeze(read_arff(arousal+search_pattern,AROUSAL_SKIP))
     return (X_valence,X_arousal,y_valence,y_arousal)
 
 def compute_ccc(y,result):
