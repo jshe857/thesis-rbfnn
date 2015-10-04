@@ -165,9 +165,14 @@ spk_samples =  X_dev1.shape[0]/9
 n = 3
 rng = range(n*spk_samples+100,(n+1)*spk_samples)
 m2 = m2[[x-100 for x in rng]]-0.12
-v2 = v2[[x-100 for x in rng]]-0.12
+v2 = v2[[x-100 for x in rng]]
 plt.figure()
-plt.plot(X_dev2[rng,TIME_IDX],y_dev2[rng],'g-',alpha=0.5,label="True Value" )
-plt.plot(X_dev2[rng,TIME_IDX],.9*m2[[x-100 for x in rng]]-0.12,'b-',alpha=0.5,label="EP" )
+plt.plot(X_dev2[rng,TIME_IDX],y_dev2[rng],'g-',alpha=0.5,label="Ground Truth" )
+plt.plot(X_dev2[rng,TIME_IDX],m2,'b-',alpha=0.5,label="EP" )
+plt.plot(X_dev2[rng,TIME_IDX],m2+2*np.sqrt(v2),'b-',alpha=0.1 )
+plt.plot(X_dev2[rng,TIME_IDX],m2-2*np.sqrt(v2),'b-',alpha=0.1 )
+
 plt.legend()
+
+
 plt.show()
