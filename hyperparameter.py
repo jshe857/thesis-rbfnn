@@ -52,14 +52,17 @@ def hyper_search(X,y,X_dev=None,y_dev=None,ccc=False):
     var_prior_arr = [0.1,0.5,0.7,1,1.1,1.5,2]
     
     
-    lam_arr = [0.02,0.03,0.04]
-    a_arr = [0,0.01]
-    eta_arr = [0.0001]
-    n_arr = [50,100,150]
-    var_prior_arr = [0.1,3]
+    # lam_arr = [0.02,0.03,0.04]
+    # a_arr = [0,0.01]
+    # eta_arr = [0.0001]
+    # n_arr = [50,100,150]
+    # var_prior_arr = [0.1,3]
    
-    best_ep = -1e6
-    best_em = -1e6
+    best_ep = 1e6
+    best_em = 1e6
+    if ccc:
+        best_ep = -1e6
+        best_em = -1e6
     params = {}
     for lam in lam_arr:
         for n in n_arr:
@@ -85,47 +88,45 @@ def hyper_search(X,y,X_dev=None,y_dev=None,ccc=False):
                        params['n_em'] = n
                        params['eta'] = eta
                        params['a'] = a
-            print params
-	    print "best EP error: " + str(best_ep)
-	    print "best EM error: " + str(best_em)
+            # print params
+    print "best EP error: " + str(best_ep)
+    print "best EM error: " + str(best_em)
     print "best params"
     print params
 
 
 
-#################### We load artificial data from an RBFNN ########################
-# n_dim = 10
-# n_nodes = 10
-# n_pts = 100
-# c = np.random.rand(n_nodes,n_dim)*2
-# w = np.random.rand(n_nodes,1)*3
-# # generate random inputs with gaussian noise
-# X =  (np.random.rand(n_pts,n_dim) - 0.5)*4 + np.random.randn(n_pts,n_dim)
-# y = []
-# for x_in in X:
-      # #rbfs = np.exp(-0.1*np.sum((x_in - c)**2,axis=1))
-      # #y.append(np.sum(w*rbfs))
-      # sins = np.sin(2*x_in)
-      # y.append(np.sum(2*sins))
-# y = np.array(y + 1*np.random.randn(n_pts))
-# eta = 1.1
-# a = 0.1
-# n_hidden_units = 50
-# print 'Artificial Optimal HyperParameter'
+# #################### We load artificial data from an RBFNN ########################
+# # n_dim = 10
+# # n_nodes = 10
+# # n_pts = 100
+# # c = np.random.rand(n_nodes,n_dim)*2
+# # w = np.random.rand(n_nodes,1)*3
+# # # generate random inputs with gaussian noise
+# # X =  (np.random.rand(n_pts,n_dim) - 0.5)*4 + np.random.randn(n_pts,n_dim)
+# # y = []
+# # for x_in in X:
+      # # #rbfs = np.exp(-0.1*np.sum((x_in - c)**2,axis=1))
+      # # #y.append(np.sum(w*rbfs))
+      # # sins = np.sin(2*x_in)
+      # # y.append(np.sum(2*sins))
+# # y = np.array(y + 1*np.random.randn(n_pts))
+# # eta = 1.1
+# # a = 0.1
+# # n_hidden_units = 50
+# # print 'Artificial Optimal HyperParameter'
 
-#################### We load the boston housing dataset ###########################
-#data = np.loadtxt('boston_housing.txt')
-#X = data[ :, range(data.shape[ 1 ] - 1) ]
-#y = data[ :, data.shape[ 1 ] - 1 ]
-#print 'Boston Housing Optimal HyperParameter'
-#################### We load concrete dataset ######################################
-# csv = np.genfromtxt ('concrete.csv', delimiter=",",skip_header=1)
-# X = csv[ :, range(csv.shape[ 1 ] - 3) ]
-# y = csv[ :, csv.shape[ 1 ] - 1 ]
-# print 'Concrete Optimal HyperParameter'
-# hyper_search(X,y)
-# y = csv[ :, csv.shape[ 1 ] - 2]
-# hyper_search(X,y)
+# ################### We load the boston housing dataset ###########################
+# data = np.loadtxt('boston_housing.txt')
+# X = data[ :, range(data.shape[ 1 ] - 1) ]
+# y = data[ :, data.shape[ 1 ] - 1 ]
+# print 'Boston Housing Optimal HyperParameter'
+# ################### We load concrete dataset ######################################
+csv = np.genfromtxt ('concrete.csv', delimiter=",",skip_header=1)
+X = csv[ :, range(csv.shape[ 1 ] - 1) ]
+y = csv[ :, csv.shape[ 1 ] - 1 ]
+print 'Concrete Optimal HyperParameter'
+hyper_search(X,y)
 # ##################### We load forestfires dataset #################################
 # csv = np.genfromtxt ('forestfires.csv', delimiter=",",skip_header=1)
 
@@ -140,21 +141,21 @@ def hyper_search(X,y,X_dev=None,y_dev=None,ccc=False):
 # print 'Forestfires Optimal HyperParameter'
 # hyper_search(X,y)
 
-################ Artificial 1D dataset ##########################################
-# num_train = 1000
-# def generate_xy(rng,num,noise=True):
-    # x_pts =  np.linspace(-rng,rng,num=num)
-    # X = np.array([x_pts]).T
-    # if (noise):
-        # y = 3*np.cos(x_pts/9) +  2*np.sin(x_pts/15) + 0.1*np.random.randn(num)
-    # else:
-        # y = 3*np.cos(x_pts/9) +  2*np.sin(x_pts/15)
-    # return(X,y)
-# rng = 80
-# X,y = generate_xy(rng,num_train)
-# hyper_search(X,y)
+# ################ Artificial 1D dataset ##########################################
+# # num_train = 1000
+# # def generate_xy(rng,num,noise=True):
+    # # x_pts =  np.linspace(-rng,rng,num=num)
+    # # X = np.array([x_pts]).T
+    # # if (noise):
+        # # y = 3*np.cos(x_pts/9) +  2*np.sin(x_pts/15) + 0.1*np.random.randn(num)
+    # # else:
+        # # y = 3*np.cos(x_pts/9) +  2*np.sin(x_pts/15)
+    # # return(X,y)
+# # rng = 80
+# # X,y = generate_xy(rng,num_train)
+# # hyper_search(X,y)
 
-###################### We load the word music dataset ###############################
+# ##################### We load the word music dataset ###############################
 # csv = np.genfromtxt ('music.csv', delimiter=",",skip_header=1)
 # X = csv[ :, range(csv.shape[ 1 ] - 2) ]
 # y = csv[ :, csv.shape[ 1 ] - 1 ]
