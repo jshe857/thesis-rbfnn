@@ -15,7 +15,7 @@ import matplotlib.patches as mpatches
 import hyperparameter
 import arff
 import glob
-np.random.seed(1)
+np.random.seed(12)
 
 TIME_STEP = 0.04
 VALENCE_SKIP = int(2/TIME_STEP)
@@ -26,14 +26,14 @@ def read_arff(glob_pattern,time_delay,read_X=False):
     if read_X:
             skip_header=1
 
-    for files in glob.glob(glob_pattern):
+    for files in sorted(glob.glob(glob_pattern)):
         # print files 
         data =arff.load(open(files))['data']
         # print data
-        # if read_X:
-                # data = data [:-time_delay]
-        # else:
-                # data = data[time_delay:]
+        if read_X:
+                data = data [:-time_delay]
+        else:
+                data = data[time_delay:]
         dataset.append([row[skip_header:] for row in data])
     return np.concatenate(dataset)
 def read_csv(glob_pattern,time_delay):
@@ -41,7 +41,9 @@ def read_csv(glob_pattern,time_delay):
     skip_col = 1
     for files in glob.glob(glob_pattern):
         data = np.genfromtxt(files,delimiter=";",skip_header=1)
-        dataset.append(data[1:,:])
+        print data.shape
+        print data[:,1:].shape
+        dataset.append(data[:,1:])
     return np.concatenate(dataset)
 # def read_arff(glob_pattern,time_delay,read_X=False):
     # dataset = []
@@ -80,8 +82,8 @@ def compute_ccc(y,result):
     b = result - e2 
     res = 2*np.mean(a*b)/(np.var(y) + np.var(result) + (e1 - e2)**2)
     return res
-# (X_dev1,X_dev2,y_dev1,y_dev2) = read_avec('dev_*')
-# (X_train1,X_train2,y_train1,y_train2) = read_avec('train_*')
+(X_dev1,X_dev2,y_dev1,y_dev2) = read_avec('dev_*')
+(X_train1,X_train2,y_train1,y_train2) = read_avec('train_*')
 
 
 
@@ -104,21 +106,8 @@ def compute_ccc(y,result):
 
 # net = EP_net.EP_net(X_train1, y_train1,
     # [n_hidden_units ],lam,var_prior)
-# net.train(X_train2,y_train1,1)
+# net.train(X_train1,y_train1,20)
 
-# #AROUSAL
-# lam = 0.02
-# var_prior = 3 
-# n_hidden_units = 100
-# # n_hidden_units = 50
-# print 'lam: ' + str(lam)
-# print 'var_prior: ' + str(var_prior)
-# print 'n_hidden_units: ' + str(n_hidden_units)
-
-# net = EP_net.EP_net(X_train2, y_train2,
-    # [n_hidden_units ],lam,var_prior)
-# net.train(X_train2,y_train2,1)
-# # ######################### EP for RBFNN approach #############################################
 
 
 
@@ -131,13 +120,31 @@ def compute_ccc(y,result):
 # print 'Valence CCC:'
 # print ccc 
 
-# m, v, v_noise = net.predict(X_dev2)
-# print "AROUSAL" 
-# for (mean,var) in zip(m,v):
-    # print [mean,var]
-# ccc = compute_ccc(y_dev2,m)
-# print 'Arousal CCC:'
-# print ccc
+
+#AROUSAL
+lam = 0.02
+var_prior = 3 
+n_hidden_units = 100
+# n_hidden_units = 50
+print 'lam: ' + str(lam)
+print 'var_prior: ' + str(var_prior)
+print 'n_hidden_units: ' + str(n_hidden_units)
+
+net = EP_net.EP_net(X_train2, y_train2,
+    [n_hidden_units ],lam,var_prior)
+net.train(X_train2,y_train2,1)
+# ######################### EP for RBFNN approach #############################################
+
+
+
+
+m, v, v_noise = net.predict(X_dev2)
+print "AROUSAL" 
+for (mean,var) in zip(m,v):
+    print [mean,var]
+ccc = compute_ccc(y_dev2,m)
+print 'Arousal CCC:'
+print ccc
 
 # ######################### EM for RBFNN approach #############################################
 # em = EM_net.EM_net(X_train,y_train, n_hidden_units,lam)

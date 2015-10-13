@@ -153,27 +153,23 @@ TIME_IDX = 0
 (X_dev1,X_dev2,y_dev1,y_dev2) = avec.read_avec('dev_*')
 (y_ind1,y_ind2) = avec.read_individual_avec('dev_*')
 
-csv = np.genfromtxt('valence.txt',delimiter=",",skip_header=0)
-m1 = csv[:,0]
-v1 = csv[:,1]
-
-csv = np.genfromtxt('arousal.txt',delimiter=",",skip_header=0)
+csv = np.genfromtxt('arousal2.txt',delimiter=",",skip_header=0)
 m2 = csv[:,0]
 v2 = csv[:,1]
 
 spk_samples =  X_dev1.shape[0]/9
 n = 3
-# rng = range(n*spk_samples+100,(n+1)*spk_samples)
-rng = range(n*spk_samples+3250,(n)*spk_samples+3800)
-m2 = m2[[x-120 for x in rng]]-0.09
-v2 = v2[[x-120 for x in rng]]
+rng = range(n*spk_samples+100,(n+1)*spk_samples)
+m2 = m2[[x for x in rng]]
+v2 = v2[[x for x in rng]]
 
 upper_bnd = m2+5*np.sqrt(v2)
 lower_bnd = m2-5*np.sqrt(v2)
 plt.figure()
 plt.plot(X_dev2[rng,TIME_IDX],y_dev2[rng],'g-',alpha=0.7,label="Ground Truth" )
-# for i in range(y_ind2.shape[1]):
-    # plt.plot(X_dev2[rng,TIME_IDX],y_ind2[rng,i],'g-',alpha=0.7,label="Ground Truth" )
+for i in range(y_ind2.shape[1]):
+    print y_ind2[:,i]
+    plt.plot(X_dev2[rng,TIME_IDX],y_ind2[rng,i],'g-',alpha=0.7,label="Ground Truth" )
 plt.plot(X_dev2[rng,TIME_IDX],m2,'b-',alpha=0.5,label="EP" )
 plt.fill_between(X_dev2[rng,TIME_IDX],upper_bnd,lower_bnd,facecolor='blue',alpha=0.3)
 plt.title('Regression Results for Speaker 3')
