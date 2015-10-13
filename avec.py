@@ -15,7 +15,7 @@ import matplotlib.patches as mpatches
 import hyperparameter
 import arff
 import glob
-np.random.seed(12)
+# np.random.seed(1)
 
 TIME_STEP = 0.04
 VALENCE_SKIP = int(2/TIME_STEP)
@@ -27,22 +27,24 @@ def read_arff(glob_pattern,time_delay,read_X=False):
             skip_header=1
 
     for files in sorted(glob.glob(glob_pattern)):
-        # print files 
         data =arff.load(open(files))['data']
-        # print data
-        if read_X:
-                data = data [:-time_delay]
-        else:
-                data = data[time_delay:]
+	if read_X:
+		data = data [:-time_delay]
+	else:
+		data = data[time_delay:]
         dataset.append([row[skip_header:] for row in data])
+    # data = np.concatenate(dataset)
+    # if read_X:
+	# data = data [:-time_delay]
+    # else:
+	# data = data[time_delay:]
+    # return data
     return np.concatenate(dataset)
 def read_csv(glob_pattern,time_delay):
     dataset = []
     skip_col = 1
-    for files in glob.glob(glob_pattern):
+    for files in sorted(glob.glob(glob_pattern)):
         data = np.genfromtxt(files,delimiter=";",skip_header=1)
-        print data.shape
-        print data[:,1:].shape
         dataset.append(data[:,1:])
     return np.concatenate(dataset)
 # def read_arff(glob_pattern,time_delay,read_X=False):
@@ -82,19 +84,12 @@ def compute_ccc(y,result):
     b = result - e2 
     res = 2*np.mean(a*b)/(np.var(y) + np.var(result) + (e1 - e2)**2)
     return res
-(X_dev1,X_dev2,y_dev1,y_dev2) = read_avec('dev_*')
-(X_train1,X_train2,y_train1,y_train2) = read_avec('train_*')
 
-
-
+# ######################### EP for RBFNN approach #############################################
+# (X_dev1,X_dev2,y_dev1,y_dev2) = read_avec('dev_*')
+# (X_train1,X_train2,y_train1,y_train2) = read_avec('train_*')
 # hyperparameter.hyper_search(X_train[:-VALENCE_SKIP],y_train1,ccc=True)
 # hyperparameter.hyper_search(X_train[:-AROUSAL_SKIP],y_train2,ccc=True)
-
-
-
-
-
-################### Construct RBFNN #################################################
 #VALENCE
 
 # lam = 0.02
@@ -122,51 +117,60 @@ def compute_ccc(y,result):
 
 
 #AROUSAL
-lam = 0.02
-var_prior = 3 
-n_hidden_units = 100
-# n_hidden_units = 50
-print 'lam: ' + str(lam)
-print 'var_prior: ' + str(var_prior)
-print 'n_hidden_units: ' + str(n_hidden_units)
+# lam = 0.02
+# var_prior = 3 
+# n_hidden_units = 100
+# # n_hidden_units = 50
+# print 'lam: ' + str(lam)
+# print 'var_prior: ' + str(var_prior)
+# print 'n_hidden_units: ' + str(n_hidden_units)
+# for i in range(1,20,2):
+    # np.random.seed(i)
+    # permutation = np.random.choice(range(X_train2.shape[ 0 ]),
+    # X_train2.shape[ 0 ], replace = False)
+    # X_train2 = X_train2[permutation, :]
+    # y_train2 = y_train2[permutation]
+    # net = EP_net.EP_net(X_train2, y_train2,
+        # [n_hidden_units ],lam,var_prior)
+    # net.train(X_train2,y_train2,1)
 
-net = EP_net.EP_net(X_train2, y_train2,
-    [n_hidden_units ],lam,var_prior)
-net.train(X_train2,y_train2,1)
-# ######################### EP for RBFNN approach #############################################
-
-
-
-
-m, v, v_noise = net.predict(X_dev2)
-print "AROUSAL" 
-for (mean,var) in zip(m,v):
-    print [mean,var]
-ccc = compute_ccc(y_dev2,m)
-print 'Arousal CCC:'
-print ccc
+    # m, v, v_noise = net.predict(X_dev2)
+    # print "AROUSAL" 
+    # for (mean,var) in zip(m,v):
+        # print [mean,var]
+    # ccc = compute_ccc(y_dev2,m)
+    # print 'Arousal CCC:'
+    # print ccc
 
 # ######################### EM for RBFNN approach #############################################
-# em = EM_net.EM_net(X_train,y_train, n_hidden_units,lam)
 
-# skip_len=10
-# for i in range(0,len(X_train),skip_len):
-    # skip = min(i+skip_len,len(X_train)-1)
-    # em.sgd(X_train[i:skip],y_train[i:skip])
-    # #print 'weights'
-    # #print em.get_sgd_weights()
-# rbf_sgd = em.sgd_predict(X_test)
-# rmse = np.sqrt(np.mean((y_test - rbf_sgd)**2))
+# n=150
+# lam = 0.009
+# eta = 0.001
+# a = 0
+# em = EM_net.EM_net(X_train1,y_train1, n,lam,eta,a)
+
+# em.sgd(X_train1,y_train1)
+# rbf_sgd = em.sgd_predict(X_dev1)
+# ccc = compute_ccc(y_dev1,rbf_sgd)
 
 # print '====================EM========================'
-# print 'test error'
-# print rmse
+# print 'EM Valence:'
+# print ccc
 
-# rbf_sgd = em.sgd_predict(X_train)
-# rmse = np.sqrt(np.mean((y_train - rbf_sgd)**2))
-# print 'train error'
-# print rmse
 
+# n=150
+# lam = 0.009
+# eta = 0.0001
+# a = 0
+# em = EM_net.EM_net(X_train2,y_train2, n,lam,eta,a)
+
+# em.sgd(X_train2,y_train2)
+# rbf_sgd = em.sgd_predict(X_dev2)
+# ccc = compute_ccc(y_dev2,rbf_sgd)
+
+# print 'EM Arousal:'
+# print ccc
 
 # result = svm.SVR().fit(X_train,y_train).predict(X_test) 
 # svr_res = np.sqrt(np.mean((y_test - result)**2))

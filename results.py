@@ -12,49 +12,38 @@ sns.set_context('paper')
 
 
 # # ============================= OVERFITTING RESULTS ==============================================
-ep_train = np.array([4.1272025848,4.1273207546,4.184813522,4.1932829004,4.1575721302,4.1841846921])
-ep_test = np.array([4.5186761294,4.5060368288,4.5722698068,4.5969571842,4.5353319837,4.5723903096])
-em_test = np.array([8.0810214418,8.4227555651,8.1442880973,7.9887169239,7.9161632818,8.0810214418])
-em_test = np.array([8.0810214418,7.4227555651,8.1442880973,8.9887169239,8.9161632818,9.0810214418])
-em_train = np.array([9.2513305486,8.281245326,7.6613469048,6.7674878493,6.5009444502,6.459586032])
-#ep_avg = 0.5*(ep_train+ep_test)
-#em_avg = 0.5*(em_train+em_test)
+# ep_train = np.array([4.1272025848,4.1273207546,4.184813522,4.1932829004,4.1575721302,4.1841846921])
+# ep_test = np.array([4.5186761294,4.5060368288,4.5722698068,4.5969571842,4.5353319837,4.5723903096])
+# em_test = np.array([8.0810214418,8.4227555651,8.1442880973,7.9887169239,7.9161632818,8.0810214418])
+# em_test = np.array([8.0810214418,7.4227555651,8.1442880973,8.9887169239,8.9161632818,9.0810214418])
+# em_train = np.array([9.2513305486,8.281245326,7.6613469048,6.7674878493,6.5009444502,6.459586032])
+# #ep_avg = 0.5*(ep_train+ep_test)
+# #em_avg = 0.5*(em_train+em_test)
 
-ep_overfit = np.array([0.0948520303,0.0917583335,0.0925862724,0.0962668853,0.0908606854,0.0927792739])*100
-em_overfit = np.array([-0.126501707,0.0170880385,0.063036069,0.1804553036,0.2176943431,0.2510122788])*100
-n = [30,50,60,75,100,125]
-plt.figure(dpi=100)
-plt.title('Boston Housing Dataset')
-# plt.tight_layout()
-# plt.subplot(2,1,1)
-plt.plot(n,em_test,'o-',label="EM-test")
-plt.plot(n,em_train,'o-',label="EM-train")
-plt.plot(n,ep_test,'o-',label="EP-test")
-plt.plot(n,ep_train,'o-',label="EP-train")
-plt.plot(50,em_test[1],'ro',label="Optimal Setting")
-plt.plot(50,ep_test[1],'ro',)
-plt.plot(50,em_train[1],'ro')
-plt.plot(50,ep_train[1],'ro')
-plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.00),
-          ncol=5, fancybox=True, shadow=True)
-# plt.xlabel("Network Size")
-plt.ylabel("RMSE")
-plt.xlabel("Network Size")
-plt.title("Prediction Error vs. Network Size")
-# plt.plot(50,0.0917583335*100,'o')
-
-# plt.subplot(2,1,2)
-# plt.plot(n,ep_overfit,'o-',label="EP")
-# plt.plot(n,em_overfit,'o-',label="EM")
-# # plt.plot(50,0.0170880385*100,'o')
-# #plt.plot(n,np.zeros(len(n)),'--',label="Optimal")
-# optimal = plt.axhline(y=0,color="black",linewidth="2",label="Optimal")
+# ep_overfit = np.array([0.0948520303,0.0917583335,0.0925862724,0.0962668853,0.0908606854,0.0927792739])*100
+# em_overfit = np.array([-0.126501707,0.0170880385,0.063036069,0.1804553036,0.2176943431,0.2510122788])*100
+# n = [30,50,60,75,100,125]
+# plt.figure(dpi=100)
+# plt.title('Boston Housing Dataset')
+# # plt.tight_layout()
+# # plt.subplot(2,1,1)
+# plt.plot(n,em_test,'o-',label="EM-test")
+# plt.plot(n,em_train,'o-',label="EM-train")
+# plt.plot(n,ep_test,'o-',label="EP-test")
+# plt.plot(n,ep_train,'o-',label="EP-train")
+# plt.plot(50,em_test[1],'ro',label="Optimal Setting")
+# plt.plot(50,ep_test[1],'ro',)
+# plt.plot(50,em_train[1],'ro')
+# plt.plot(50,ep_train[1],'ro')
 # plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.00),
-          # ncol=3, fancybox=True, shadow=True)
+          # ncol=5, fancybox=True, shadow=True)
+# # plt.xlabel("Network Size")
+# plt.ylabel("RMSE")
 # plt.xlabel("Network Size")
-# plt.ylabel(r"$\Delta$ Test Error/ Training Error \%")
-# plt.title("Level of Overfitting vs. Network Size")
-# plt.savefig("boston_overfit.png")
+# plt.title("Prediction Error vs. Network Size")
+
+
+
 
 # #########################POSTERIOR ESTIMATION###############################
 
@@ -152,27 +141,27 @@ plt.title("Prediction Error vs. Network Size")
 TIME_IDX = 0
 (X_dev1,X_dev2,y_dev1,y_dev2) = avec.read_avec('dev_*')
 (y_ind1,y_ind2) = avec.read_individual_avec('dev_*')
-
 csv = np.genfromtxt('arousal2.txt',delimiter=",",skip_header=0)
 m2 = csv[:,0]
 v2 = csv[:,1]
 
-spk_samples =  X_dev1.shape[0]/9
-n = 3
-rng = range(n*spk_samples+100,(n+1)*spk_samples)
+
+spk_samples =  X_dev2.shape[0]/9
+n = 4
+rng = range(n*spk_samples+6375,(n)*spk_samples+7125)
 m2 = m2[[x for x in rng]]
 v2 = v2[[x for x in rng]]
 
-upper_bnd = m2+5*np.sqrt(v2)
-lower_bnd = m2-5*np.sqrt(v2)
+upper_bnd = m2+6*np.sqrt(v2)
+lower_bnd = m2-6*np.sqrt(v2)
 plt.figure()
-plt.plot(X_dev2[rng,TIME_IDX],y_dev2[rng],'g-',alpha=0.7,label="Ground Truth" )
-for i in range(y_ind2.shape[1]):
-    print y_ind2[:,i]
-    plt.plot(X_dev2[rng,TIME_IDX],y_ind2[rng,i],'g-',alpha=0.7,label="Ground Truth" )
-plt.plot(X_dev2[rng,TIME_IDX],m2,'b-',alpha=0.5,label="EP" )
-plt.fill_between(X_dev2[rng,TIME_IDX],upper_bnd,lower_bnd,facecolor='blue',alpha=0.3)
-plt.title('Regression Results for Speaker 3')
+plt.plot(X_dev2[rng,TIME_IDX]-255,y_dev2[rng],'g-',alpha=0.7,label="Ground Truth" )
+
+# plt.plot(X_dev2[rng,TIME_IDX],np.amax(y_ind2[rng,:],axis=1),'g--',alpha=0.5,label="Rater Maximum" )
+# plt.plot(X_dev2[rng,TIME_IDX],np.amin(y_ind2[rng,:],axis=1),'g--',alpha=0.5, label = "Rater Minimum")
+plt.plot(X_dev2[rng,TIME_IDX]-255,m2,'b-',alpha=0.5,label="EP" )
+plt.fill_between(X_dev2[rng,TIME_IDX]-255,upper_bnd,lower_bnd,facecolor='blue',alpha=0.3)
+plt.title('Regression Results for Speaker 4')
 plt.xlabel('Time(s)')
 plt.ylabel('Arousal')
 plt.legend()
