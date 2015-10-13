@@ -148,20 +148,30 @@ v2 = csv[:,1]
 
 spk_samples =  X_dev2.shape[0]/9
 n = 4
-rng = range(n*spk_samples+6375,(n)*spk_samples+7125)
-m2 = m2[[x for x in rng]]
-v2 = v2[[x for x in rng]]
+rng = range(n*spk_samples,(n+1)*spk_samples)
+# m2 = m2[[x for x in rng]]
+# v2 = v2[[x for x in rng]]
 
-upper_bnd = m2+6*np.sqrt(v2)
-lower_bnd = m2-6*np.sqrt(v2)
+upper_bnd = m2+7*np.sqrt(v2)
+lower_bnd = m2-7*np.sqrt(v2)
+
+
+skip_rng = range(n*spk_samples,(n+1)*spk_samples,100)
+err = 7*np.sqrt(v2[skip_rng])
+print X_dev2[skip_rng].shape
+print m2[skip_rng].shape
+print np.squeeze(err.shape)
 plt.figure()
-plt.plot(X_dev2[rng,TIME_IDX]-255,y_dev2[rng],'g-',alpha=0.7,label="Ground Truth" )
+plt.plot(X_dev2[rng,TIME_IDX],m2[rng],'b-',alpha=0.5,label="EP" )
+plt.errorbar(X_dev2[skip_rng,TIME_IDX],m2[skip_rng],yerr=err,fmt='b-',alpha=0.5)
+plt.plot(X_dev2[rng,TIME_IDX],y_dev2[rng],'g-',alpha=0.7,label="Ground Truth" )
+# plt.plot(X_dev2[rng,TIME_IDX],np.amax(y_ind2[rng,:],axis=1),'g--',alpha=0.5,label="Rater Maxima and Minima" )
+# plt.plot(X_dev2[rng,TIME_IDX],np.amin(y_ind2[rng,:],axis=1),'g--',alpha=0.5)
+# for i in range(y_ind2.shape[1]):
+    # plt.plot(X_dev2[rng,TIME_IDX],y_ind2[rng,i],'g--',alpha=0.2)
 
-# plt.plot(X_dev2[rng,TIME_IDX],np.amax(y_ind2[rng,:],axis=1),'g--',alpha=0.5,label="Rater Maximum" )
-# plt.plot(X_dev2[rng,TIME_IDX],np.amin(y_ind2[rng,:],axis=1),'g--',alpha=0.5, label = "Rater Minimum")
-plt.plot(X_dev2[rng,TIME_IDX]-255,m2,'b-',alpha=0.5,label="EP" )
-plt.fill_between(X_dev2[rng,TIME_IDX]-255,upper_bnd,lower_bnd,facecolor='blue',alpha=0.3)
-plt.title('Regression Results for Speaker 4')
+plt.fill_between(X_dev2[rng,TIME_IDX],upper_bnd,lower_bnd,facecolor='blue',alpha=0.3)
+plt.title('Regression Results for Speaker 2')
 plt.xlabel('Time(s)')
 plt.ylabel('Arousal')
 plt.legend()
