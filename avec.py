@@ -27,7 +27,9 @@ def read_arff(glob_pattern,time_delay,read_X=False):
             skip_header=1
 
     for files in glob.glob(glob_pattern):
+        # print files 
         data =arff.load(open(files))['data']
+        # print data
         # if read_X:
                 # data = data [:-time_delay]
         # else:
@@ -78,8 +80,8 @@ def compute_ccc(y,result):
     b = result - e2 
     res = 2*np.mean(a*b)/(np.var(y) + np.var(result) + (e1 - e2)**2)
     return res
-(X_dev1,X_dev2,y_dev1,y_dev2) = read_avec('dev_*')
-(X_train1,X_train2,y_train1,y_train2) = read_avec('train_*')
+# (X_dev1,X_dev2,y_dev1,y_dev2) = read_avec('dev_*')
+# (X_train1,X_train2,y_train1,y_train2) = read_avec('train_*')
 
 
 
