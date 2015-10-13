@@ -122,11 +122,11 @@ def hyper_search(X,y,X_dev=None,y_dev=None,ccc=False):
 # y = data[ :, data.shape[ 1 ] - 1 ]
 # print 'Boston Housing Optimal HyperParameter'
 # ################### We load concrete dataset ######################################
-csv = np.genfromtxt ('concrete.csv', delimiter=",",skip_header=1)
-X = csv[ :, range(csv.shape[ 1 ] - 1) ]
-y = csv[ :, csv.shape[ 1 ] - 1 ]
-print 'Concrete Optimal HyperParameter'
-hyper_search(X,y)
+# csv = np.genfromtxt ('concrete.csv', delimiter=",",skip_header=1)
+# X = csv[ :, range(csv.shape[ 1 ] - 1) ]
+# y = csv[ :, csv.shape[ 1 ] - 1 ]
+# print 'Concrete Optimal HyperParameter'
+# hyper_search(X,y)
 # ##################### We load forestfires dataset #################################
 # csv = np.genfromtxt ('forestfires.csv', delimiter=",",skip_header=1)
 
