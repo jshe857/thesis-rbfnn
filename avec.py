@@ -34,7 +34,13 @@ def read_arff(glob_pattern,time_delay,read_X=False):
                 # data = data[time_delay:]
         dataset.append([row[skip_header:] for row in data])
     return np.concatenate(dataset)
-
+def read_csv(glob_pattern,time_delay):
+    dataset = []
+    skip_col = 1
+    for files in glob.glob(glob_pattern):
+        data = np.genfromtxt(files,delimiter=";",skip_header=1)
+        dataset.append(data[1:,:])
+    return np.concatenate(dataset)
 # def read_arff(glob_pattern,time_delay,read_X=False):
     # dataset = []
     # skip_header = 2
@@ -58,6 +64,12 @@ def read_avec(search_pattern):
     y_valence = np.squeeze(read_arff(valence+search_pattern,VALENCE_SKIP))
     y_arousal = np.squeeze(read_arff(arousal+search_pattern,AROUSAL_SKIP))
     return (X_valence,X_arousal,y_valence,y_arousal)
+def read_individual_avec(search_pattern):
+    valence = 'Data/avec/ratings_individual/valence/'
+    arousal = 'Data/avec/ratings_individual/arousal/'
+    y_valence = np.squeeze(read_csv(valence+search_pattern,VALENCE_SKIP))
+    y_arousal = np.squeeze(read_csv(arousal+search_pattern,AROUSAL_SKIP))
+    return (y_valence,y_arousal)
 
 def compute_ccc(y,result):
     e1 = np.mean(y)

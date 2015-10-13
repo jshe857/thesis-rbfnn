@@ -151,7 +151,7 @@ plt.title("Prediction Error vs. Network Size")
 #========================= AVEC RESULTS ==============================
 TIME_IDX = 0
 (X_dev1,X_dev2,y_dev1,y_dev2) = avec.read_avec('dev_*')
-# (X_train1,X_train2,y_train1,y_train2) = avec.read_avec('train_*')
+(y_ind1,y_ind2) = avec.read_individual_avec('dev_*')
 
 csv = np.genfromtxt('valence.txt',delimiter=",",skip_header=0)
 m1 = csv[:,0]
@@ -172,6 +172,8 @@ upper_bnd = m2+5*np.sqrt(v2)
 lower_bnd = m2-5*np.sqrt(v2)
 plt.figure()
 plt.plot(X_dev2[rng,TIME_IDX],y_dev2[rng],'g-',alpha=0.7,label="Ground Truth" )
+# for i in range(y_ind2.shape[1]):
+    # plt.plot(X_dev2[rng,TIME_IDX],y_ind2[rng,i],'g-',alpha=0.7,label="Ground Truth" )
 plt.plot(X_dev2[rng,TIME_IDX],m2,'b-',alpha=0.5,label="EP" )
 plt.fill_between(X_dev2[rng,TIME_IDX],upper_bnd,lower_bnd,facecolor='blue',alpha=0.3)
 plt.title('Regression Results for Speaker 3')
