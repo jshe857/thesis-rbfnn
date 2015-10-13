@@ -6,3 +6,4 @@ data/*
 *.pgf
 *.swp
 Data/*
+hyperparameter.py
