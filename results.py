@@ -163,9 +163,10 @@ v2 = csv[:,1]
 
 spk_samples =  X_dev1.shape[0]/9
 n = 3
-rng = range(n*spk_samples+100,(n+1)*spk_samples)
-m2 = m2[[x-100 for x in rng]]-0.12
-v2 = v2[[x-100 for x in rng]]
+# rng = range(n*spk_samples+100,(n+1)*spk_samples)
+rng = range(n*spk_samples+3250,(n)*spk_samples+3800)
+m2 = m2[[x-120 for x in rng]]-0.09
+v2 = v2[[x-120 for x in rng]]
 
 upper_bnd = m2+5*np.sqrt(v2)
 lower_bnd = m2-5*np.sqrt(v2)
