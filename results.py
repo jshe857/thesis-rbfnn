@@ -91,6 +91,7 @@ ax[0].set_xlim(0.9,1.1)
 csv = np.genfromtxt ('w_25.txt', delimiter=",",skip_header=0)
 ax[1].axvline(x=1,color='r',label='True Model',alpha=0.3)
 ax[1].axvline(x=3,color='r',alpha=0.3)
+ax[1].set_xlim(0.5,5)
 plot_posterior(ax[1],csv,[2.97386467,1.03541186],[0.000023959213,0.00001995262],'w')
 
 #########################Uncertainty Estimate###############################
