@@ -37,15 +37,6 @@ class Network:
         self.a = theano.shared(float(a_init))
         self.b = theano.shared(float(b_init))
 
-    def output_deterministic(self, x):
-
-        # Recursively compute output
-
-        for layer in self.layers:
-            x = layer.output_deterministic(x)
-
-        return x
-
     def output_probabilistic(self, m):
 
         v = T.zeros_like(m)
