@@ -40,7 +40,7 @@ plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.00),
 # plt.xlabel("Network Size")
 plt.ylabel("RMSE")
 plt.xlabel("Network Size")
-plt.title("Prediction Error vs. Network Size")
+plt.title("Boston Housing Prediction Error vs. Network Size")
 
 
 
@@ -107,7 +107,7 @@ def generate_xy(rng,num,noise=True):
     return(X,y)
 
 fig,ax = plt.subplots(2, sharex=True,figsize=(7,8))
-plt.suptitle('''Prediction Variance\n $f(x) = 3\\cos(\\frac{x}/{9}) + 2\sin(\\frac{x}{15})$''')
+plt.suptitle('''Prediction Variance''')
 rng = 50
 x_true,y_true = generate_xy(rng,200,noise=False)
 x_100_noise,y_100_noise = generate_xy(rng,100,noise=True)

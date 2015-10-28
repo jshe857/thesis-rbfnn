@@ -15,6 +15,8 @@ import matplotlib.patches as mpatches
 import hyperparameter
 import arff
 import glob
+import theano
+theano.config.profile = True
 # np.random.seed(1)
 
 TIME_STEP = 0.04
@@ -86,22 +88,22 @@ def compute_ccc(y,result):
     return res
 
 # ######################### EP for RBFNN approach #############################################
-# (X_dev1,X_dev2,y_dev1,y_dev2) = read_avec('dev_*')
-# (X_train1,X_train2,y_train1,y_train2) = read_avec('train_*')
+(X_dev1,X_dev2,y_dev1,y_dev2) = read_avec('dev_*')
+(X_train1,X_train2,y_train1,y_train2) = read_avec('train_*')
 # hyperparameter.hyper_search(X_train[:-VALENCE_SKIP],y_train1,ccc=True)
 # hyperparameter.hyper_search(X_train[:-AROUSAL_SKIP],y_train2,ccc=True)
 #VALENCE
 
-# lam = 0.02
-# var_prior = 0.1 
-# n_hidden_units = 150
-# print 'lam: ' + str(lam)
-# print 'var_prior: ' + str(var_prior)
-# print 'n_hidden_units: ' + str(n_hidden_units)
+lam = 0.02
+var_prior = 0.1 
+n_hidden_units = 150
+print 'lam: ' + str(lam)
+print 'var_prior: ' + str(var_prior)
+print 'n_hidden_units: ' + str(n_hidden_units)
 
-# net = EP_net.EP_net(X_train1, y_train1,
-    # [n_hidden_units ],lam,var_prior)
-# net.train(X_train1,y_train1,20)
+net = EP_net.EP_net(X_train1, y_train1,
+    [n_hidden_units ],lam,var_prior)
+net.train(X_train1,y_train1,2)
 
 
 

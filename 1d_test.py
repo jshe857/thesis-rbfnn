@@ -8,38 +8,30 @@ import MC_net
 import EP_net
 # import matplotlib
 # matplotlib.use('pgf')
+import seaborn as sns
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 np.random.seed(1)
+sns.set_context('poster')
 # We create the train and test sets with 90% and 10% of the data
 #Generate artificial data
-num_train = 700 
+num_train = 100 
 num_test = 500
 def generate_xy(rng,num,noise=True):
     x_pts =  np.linspace(-rng,rng,num=num)
     X = np.array([x_pts]).T
     if (noise):
-        #y = 3*np.cos(x_pts/9) +  2*np.sin(x_pts/15) + 0.1*np.random.randn(num)
-        y = 3*np.exp(-10*(x_pts - 1)**2) + 1+ 0.01*np.random.randn(num) 
+        y = 3*np.cos(x_pts/9) + 2*np.sin(x_pts/15) + 0.5*np.random.randn(num)
+        # y = 3*np.exp(-10*(x_pts - 1)**2) + 1+ 0.01*np.random.randn(num) 
     else:
-        #y = 3*np.cos(x_pts/9) +  2*np.sin(x_pts/15)
-        y = 3*np.exp(-10*(x_pts - 1)**2) + 1
+        y = 3*np.cos(x_pts/9) + 2*np.sin(x_pts/15)
+        # y = 3*np.exp(-10*(x_pts - 1)**2) + 1
     return(X,y)
-#rng = 50
-rng = 5
+rng = 70
+# rng = 5
 X,y = generate_xy(rng,num_train)
 print X.shape
 print y.shape
-
-################### We load concrete dataset ######################################
-#csv = np.genfromtxt ('concrete.csv', delimiter=",",skip_header=1)
-#X = csv[ :, range(csv.shape[ 1 ] - 3) ]
-#y = csv[ :, csv.shape[ 1 ] - 1 ]
-
-################### We load power dataset ######################################
-#csv = np.genfromtxt ('power.csv', delimiter=",",skip_header=1)
-#X = csv[ 1:100, range(csv.shape[ 1 ] - 1) ]
-#y = csv[ 1:100, csv.shape[ 1 ] - 1 ]
 
 permutation = np.random.choice(range(X.shape[ 0 ]),
     X.shape[ 0 ], replace = False)
@@ -49,18 +41,27 @@ index_test = permutation[ size_train : ]
 
 X_train = X[ index_train, : ]
 y_train = y[ index_train ]
-X_test,y_test = generate_xy(rng,num_test)
+X_test,y_test = generate_xy(rng,num_test,noise=False)
 plt.plot(X_test,y_test)
 plt.show()
 
 #MC_net.MC_net(X_train,y_train,6,lam=10)
 # MC_net.MC_net(X_train,y_train,1,lam=10)
 
-net = EP_net.EP_net(X_train, y_train,[1],10,1,debug=True)
-net.train(X_train,y_train,1)
-# m, v, v_noise = net.predict(X_test)
-# plt.plot(X_test,m-7*np.sqrt(v),X_test,m+7*np.sqrt(v))
-# plt.show()
+net = EP_net.EP_net(X_train, y_train,[50],4,0.008,debug=False)
+net.train(X_train,y_train,20)
+
+
+m, v, v_noise = net.predict(X_test)
+X_test = np.squeeze(X_test)
+upper = (m-2*np.sqrt(v))
+lower = (m+2*np.sqrt(v))
+plt.scatter(X_train,y_train,c='r',s=10,label="Training Data")
+plt.plot(X_test,m, label="EP")
+plt.fill_between(X_test,upper,lower,alpha=0.4)
+plt.plot(X_test,y_test,label="True Function")
+plt.legend()
+plt.show()
 # for (mean,var) in zip(m,v): 
     # print str(mean+5*np.sqrt(var)) +','+str(mean)+','+str(mean-5*np.sqrt(var))
 

@@ -11,10 +11,15 @@ sys.path.append('EP/')
 import EP_net
 import Data
 import matplotlib
-matplotlib.use('pgf')
+import seaborn as sns
+# matplotlib.use('pgf')
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
-np.random.seed(10)
+import theano
+sns.set_context('poster')
+
+# theano.config.profile = True
+
 def run_test(X,y,a,lam_em,lam,eta,n,n_em,var_prior):
     ################### Construct RBFNN #################################################
     print 'lam: ' + str(lam)
@@ -26,7 +31,6 @@ def run_test(X,y,a,lam_em,lam,eta,n,n_em,var_prior):
     y_train = dataset['y_train']
     X_test = dataset['X_test']
     y_test = dataset['y_test']
-    # skip_len = 500
     net = EP_net.EP_net(X_train, y_train,
         [n ],lam,var_prior)
 
@@ -41,6 +45,7 @@ def run_test(X,y,a,lam_em,lam,eta,n,n_em,var_prior):
 
     ################# EM for RBFNN approach #############################################
     em = EM_net.EM_net(X_train,y_train, n_em,lam_em,eta,a)
+
     em.sgd(X_train,y_train)
     rbf_sgd = em.sgd_predict(X_test)
     rmse = np.sqrt(np.mean((y_test - rbf_sgd)**2))
@@ -77,66 +82,70 @@ def run_test(X,y,a,lam_em,lam,eta,n,n_em,var_prior):
      # sins = np.sin(2*x_in)
      # y.append(np.sum(2*sins))
 # y = np.array(y + 1*np.random.randn(n_pts))
-#################### We load the boston housing dataset ###########################
-data = np.loadtxt('boston_housing.txt')
-X = data[ :, range(data.shape[ 1 ] - 1) ]
-y = data[ :, data.shape[ 1 ] - 1 ]
-var_prior = 1.0 
-n = 40
-n_em = 50
-lam_em = 0.01
-lam = 0.05
-eta = 0.0212
-a=0
+# #################### We load the boston housing dataset ###########################
+# print "Boston"
+# data = np.loadtxt('boston_housing.txt')
+# X = data[ :, range(data.shape[ 1 ] - 1) ]
+# y = data[ :, data.shape[ 1 ] - 1 ]
+# var_prior = 1.0 
+# n = 40
+# n_em = 50
+# lam_em = 0.01
+# lam = 0.05
+# eta = 0.0212
+# a=0
 
-run_test(X,y,a,lam_em,lam,eta,n,n_em,var_prior)
+# run_test(X,y,a,lam_em,lam,eta,n,n_em,var_prior)
 #################### We load concrete dataset 2######################################
-csv = np.genfromtxt ('concrete.csv', delimiter=",",skip_header=0)
-X = csv[ :, range(csv.shape[ 1 ] - 1) ]
-y = csv[ :, csv.shape[ 1 ] - 1]
-a=0
-lam_em=0.01
-lam = 0.1
-eta=0.3
-n=50
-n_em=20
-var_prior=0.1
+# print "Concrete"
+# csv = np.genfromtxt ('concrete.csv', delimiter=",",skip_header=0)
+# X = csv[ :, range(csv.shape[ 1 ] - 1) ]
+# y = csv[ :, csv.shape[ 1 ] - 1]
+# a=0
+# lam_em=0.01
+# lam = 0.1
+# eta=0.3
+# n=50
+# n_em=20
+# var_prior=0.1
 
-run_test(X,y,a,lam_em,lam,eta,n,n_em,var_prior)
+# run_test(X,y,a,lam_em,lam,eta,n,n_em,var_prior)
 ##################### We load forestfires dataset #################################
-csv = np.genfromtxt ('forestfires.csv', delimiter=",",skip_header=1)
+# print "Forest"
+# csv = np.genfromtxt ('forestfires.csv', delimiter=",",skip_header=1)
 
-ind = range(csv.shape[ 1 ] - 1)
-ind = [x for x in ind if (x != 2 and x != 3)]
-X = csv[ :,ind]
-y = csv[ :, csv.shape[ 1 ] - 1 ]
+# ind = range(csv.shape[ 1 ] - 1)
+# ind = [x for x in ind if (x != 2 and x != 3)]
+# X = csv[ :,ind]
+# y = csv[ :, csv.shape[ 1 ] - 1 ]
 
-for i in range(len(y)):
-    if y[i] > 0:
-        y[i] = np.log(y[i])
-a=0
-lam_em=0.1
-lam = 0.05
-eta=0.1
-n_em = 10
-n =20
-var_prior=0.5
+# for i in range(len(y)):
+    # if y[i] > 0:
+        # y[i] = np.log(y[i])
+# a=0
+# lam_em=0.1
+# lam = 0.05
+# eta=0.1
+# n_em = 10
+# n =20
+# var_prior=0.5
 
-run_test(X,y,a,lam_em,lam,eta,n,n_em,var_prior)
+# run_test(X,y,a,lam_em,lam,eta,n,n_em,var_prior)
 
-###################### We load the word music dataset ###############################
+# ###################### We load the word music dataset ###############################
+# print "Music 1"
 csv = np.genfromtxt ('music.csv', delimiter=",",skip_header=1)
 X = csv[ :, range(csv.shape[ 1 ] - 2) ]
-y = csv[ :, csv.shape[ 1 ] - 1 ]
-a=0
-lam_em=0.01
-lam=0.05
-eta =0.1
-n=10
-n_em=20
-var_prior=0.5
+# y = csv[ :, csv.shape[ 1 ] - 1 ]
+# a=0
+# lam_em=0.01
+# lam=0.05
+# eta =0.1
+# n=10
+# n_em=20
+# var_prior=0.5
 
-run_test(X,y,a,lam_em,lam,eta,n,n_em,var_prior)
+# run_test(X,y,a,lam_em,lam,eta,n,n_em,var_prior)
 
 y = csv[ :, csv.shape[ 1 ] - 2 ]
 a=0
@@ -148,4 +157,5 @@ n_em=50
 var_prior=0.1
 
 
+print "Music 2"
 run_test(X,y,a,lam_em,lam,eta,n,n_em,var_prior)
